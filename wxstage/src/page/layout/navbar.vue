@@ -61,11 +61,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.mynavbar{position: absolute;bottom:0;width: 100%;border-top: 1px solid #EFF2F7;background:#EFF2F7;padding-left: 0.6%;height: 8vh;}
-h1, h2 {
-  font-weight: normal;
-}
-
+.mynavbar{position: absolute;bottom:0;width: 100%;border-top: 1px solid #EFF2F7;background:#EFF2F7;padding-left: 0.6%;height: 10vh;}
 ul {
   list-style-type: none;
   padding: 0;
@@ -73,8 +69,9 @@ ul {
 a {
   color:#475669;
 }
+.mynavbar div{}
 nav{margin:0 auto;display: block;width: 90%;}
-nav ul li{display: inline-block; width: 30%;text-align: center;height: 8vh;padding-top: 5%;color: #8492A6;}
+nav ul li{display: inline-block; width: 30%;text-align: center;height: 10vh;padding-top: 5%;color: #8492A6;}
 .el-dropdown{width: 32%;margin:0;}
-.el-dropdown button{width: 100%;border:none;height: 8vh;}
+.el-dropdown button{width: 100%;border:none;height: 10vh;}
 </style>

@@ -24,6 +24,8 @@
         <el-date-picker type="date" placeholder="选择日期" v-model="date2" style="width: 100%;"></el-date-picker>
     </el-col>
     <el-col :span="22" :offset="1" class="search">查询</el-col>
+    <el-col :span="10" :offset="1" class="tablet">充值总额：<span>1000</span>元</el-col>
+    <el-col :span="10" :offset="2" class="tablet">返现总额：<span>1000</span>元</el-col>
      <el-table
     :data="tableData"
     border
@@ -33,13 +35,7 @@
     width="100"
       label="代理级别">
       <template scope="scope">
-        <el-popover trigger="hover" placement="top">
-          <p>姓名: {{ scope.row.name }}</p>
-          <p>住址: {{ scope.row.address }}</p>
-          <div slot="reference" class="name-wrapper">
-            <el-tag>{{ scope.row.name }}</el-tag>
-          </div>
-        </el-popover>
+      {{scope.row.dl}}
       </template>
     </el-table-column>
     <el-table-column
@@ -47,13 +43,7 @@
       width="100"
       align="center">
       <template scope="scope">
-        <el-popover trigger="hover" placement="top">
-          <p>姓名: {{ scope.row.name }}</p>
-          <p>住址: {{ scope.row.address }}</p>
-          <div slot="reference" class="name-wrapper">
-            <el-tag>{{ scope.row.name }}</el-tag>
-          </div>
-        </el-popover>
+       
       </template>
     </el-table-column>
     <el-table-column
@@ -61,16 +51,10 @@
     width="100"
       label="钻石消耗">
       <template scope="scope">
-        <el-popover trigger="hover" placement="top">
-          <p>姓名: {{ scope.row.name }}</p>
-          <p>住址: {{ scope.row.address }}</p>
-          <div slot="reference" class="name-wrapper">
-            <el-tag>{{ scope.row.name }}</el-tag>
-          </div>
-        </el-popover>
+        
       </template>
     </el-table-column>
-    <el-table-column label="操作" width="80" align="center">
+    <el-table-column label="操作" align="center">
       <template scope="scope">
         <el-button
         type="primary"
@@ -90,23 +74,17 @@ export default {
       input1:null,
       yqcode:'邀请码：011784',
       date1:null,
-      date2:null ,
+      date2:null,
       tableData: [{
           date: '2016-05-02',
           name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
+          address: '上海市普陀区金沙江路 1518 弄',
+          dl:'直属团队(返45%)',
         }, {
           date: '2016-05-04',
           name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
+          address: '上海市普陀区金沙江路 1517 弄',
+          dl:'二级团队(返10%)',
         }]     
     }
   },
@@ -129,7 +107,7 @@ div{text-align: center;}
 .brrl{border-right:1px solid #dddddd; border-left:1px solid #dddddd;}
 .member{margin-top: 1vh;width: 100%;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;color: #20A0FF;font-weight: normal;}
 .mart{margin-top: 2vh;}
-.tablet{margin-bottom: 2vh;}
+.tablet{margin-bottom: 2vh;color: #1F2D3D;font-size: 0.9rem;font-weight: normal;}
 .search{color: #fff;background-color: #20a0ff;border-color: #20a0ff;padding: 7px 9px;font-size: 12px;border-radius: 4px;margin-bottom: 2vh;}
 .search:active{background-color: #58B7FF;}
 </style>
