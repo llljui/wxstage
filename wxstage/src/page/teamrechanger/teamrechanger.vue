@@ -43,7 +43,7 @@
       width="100"
       align="center">
       <template scope="scope">
-       
+       {{scope.row.date}}
       </template>
     </el-table-column>
     <el-table-column
@@ -51,7 +51,7 @@
     width="100"
       label="钻石消耗">
       <template scope="scope">
-        
+          {{scope.row.date}}
       </template>
     </el-table-column>
     <el-table-column label="操作" align="center">
