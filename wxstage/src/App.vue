@@ -19,4 +19,5 @@ export default {
   color: #2c3e50;
 }
 *{margin:0;padding: 0;list-style: none;text-decoration: none;font-family: '微软雅黑';}
+body{width: 101%;overflow: hidden;}
 </style>

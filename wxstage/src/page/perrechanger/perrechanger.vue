@@ -27,7 +27,7 @@
 	    </el-date-picker>	
 	  </div>
 	</el-col>
-	<el-col :span="22" :offset="1" class="search mrt">查询</el-col>
+	<el-col :span="22" :offset="1" class="search mrt"><el-button type="primary">查询</el-button></el-col>
 	<el-table
 	:key="tableH"
     :data="tableData"
@@ -137,7 +137,6 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .mrt{margin-top: 2vh; font-size: 0.9rem;color:   #1F2D3D}
-.search{color: #fff;background-color: #20a0ff;border-color: #20a0ff;padding: 7px 9px;font-size: 1rem;border-radius: 4px;margin-bottom: 2vh;text-align: center;;}
-.search:active{background-color: #58B7FF;}
-
+.search{border-color: #20a0ff;padding: 7px 9px;font-size: 1rem;border-radius: 4px;margin-bottom: 2vh;text-align: center;}
+.search button{width: 100%;}
 </style>

@@ -23,7 +23,7 @@
     <el-col :span="10" class="mart tablet">
         <el-date-picker type="date" placeholder="选择日期" v-model="date2" style="width: 100%;"></el-date-picker>
     </el-col>
-    <el-col :span="22" :offset="1" class="search"><div @click="searchinfo">查询</div></el-col>
+    <el-col :span="22" :offset="1" class="search"><el-button width="100%" @click="searchinfo" type="primary">查询</el-button></el-col>
     <el-col :span="10" :offset="1" class="tablet">充值总额：<span>1000</span>元</el-col>
     <el-col :span="10" :offset="2" class="tablet">返现总额：<span>1000</span>元</el-col>
      <el-table
@@ -159,7 +159,7 @@ div{text-align: center;}
 .member{margin-top: 1vh;width: 100%;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;color: #20A0FF;font-weight: normal;}
 .mart{margin-top: 2vh;}
 .tablet{margin-bottom: 2vh;color: #1F2D3D;font-size: 0.9rem;font-weight: bold;}
-.search{color: #fff;background-color: #50bfff;border-color: #20a0ff;padding: 7px 9px;font-size: 14px;border-radius: 4px;margin-bottom: 2vh;}
-.search:active{background-color: #58B7FF;}
+.search{border-color: #20a0ff;padding: 7px 9px;font-size: 14px;border-radius: 4px;margin-bottom: 2vh;}
+.search button{width: 100%;}
 .detailbtn{color:#50bfff;border:1px solid #50bfff;}
 </style>
