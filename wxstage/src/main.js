@@ -10,7 +10,13 @@ import 'element-ui/lib/theme-default/index.css'
 import './style.less'
 
 Vue.config.productionTip = false
-
+/*if (sessionStorage.sid) {
+	router.push({path:'teamrechanger'});
+	console.log(22);
+}else{
+	router.push({path:'login'});
+	console.log(22);
+}*/
 //Vue.use(MuseUI)
 Vue.use(ElementUI)
 /* eslint-disable no-new */

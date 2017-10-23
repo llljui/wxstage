@@ -15,7 +15,7 @@ export default new Router({
       redirect: 'commission/commission',
       hidden: true,
       noDropdown: true,
-      children: [{ path: 'commission', name:'提成结算', component: _import('commission/commission') }]
+      children: [{ path: 'commission', name:'提现结算', component: _import('commission/commission') }]
     },
     {
       path:'/member',
@@ -64,6 +64,39 @@ export default new Router({
       hidden: true,
       noDropdown: true,
       children: [{ path: 'diamondssold', name:'钻石出售', component: _import('diamondssold/diamondssold') }]
+    },
+     {
+      path:'/diamondsbuy',
+      component:layout,
+      redirect: 'diamondsbuy/diamondsbuy',
+      hidden: true,
+      noDropdown: true,
+      children: [{ path: 'diamondsbuy', name:'钻石购买', component: _import('diamondsbuy/diamondsbuy') }]
+    },
+     {
+      path:'/secdetail',
+      component:layout,
+      redirect: 'secdetail/secdetail',
+      hidden: true,
+      noDropdown: true,
+      children: [{ path: 'secdetail', name:'二级团队', component: _import('secdetail/secdetail') }]
+    },
+     {
+      path:'/teamdetail',
+      component:layout,
+      redirect: 'teamdetail/teamdetail',
+      hidden: true,
+      noDropdown: true,
+      children: [{ path: 'teamdetail', name:'直属团队', component: _import('teamdetail/teamdetail') }]
+    },
+    {
+      path:'/authorize',
+      component:layout,
+      redirect: 'authorize/authorize',
+      hidden: true,
+      noDropdown: true,
+      children: [{ path: 'authorize', name:'代理授权', component: _import('authorize/authorize') }]
     }
+    
   ]
 })

@@ -1,6 +1,6 @@
 <template>
   <div class="myheader" :key="headerkey">
-    <header v-html="nowheader"></header>
+   <header><i class="el-icon-fa el-icon-fa-home el-icon-fa-5x homeleft" @click="gohome"></i>{{nowheader}}</header>
   </div>
 </template>
 <script>
@@ -18,15 +18,19 @@ export default {
         self.nowheader=self.$route.name;
       }
     
+  },
+  methods:{
+    gohome:function () {
+      this.$router.push({path: '/teamrechanger'});
+    }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-
-.myheader{text-align: center;background: #1D8CE0;height:5vh;padding-top: 2%;color: white;}
+header{font-size: 1.1rem;font-family: '微软雅黑';line-height: 5vh;display: block;}
+.myheader{text-align: center;background: #1D8CE0;height:6vh;padding-top: 2%;color: white;padding-right: 10vw;line-height: 5vh;}
+.homeleft{float: left;margin-left: 3vw;}
+.el-icon-fa-home:before{font-size:1.9rem;}
 </style>

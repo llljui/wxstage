@@ -4,16 +4,16 @@
 	<el-col :span="8" >
 		<div class="brb">
 			直属会员
-			<h5 class="member">22</h5>
+			<h5 class="member" v-html="members"></h5>
 		</div>
 	</el-col>
 	<el-col :span="8" ><div class="brb brrl">
 			下级推广员
-			<h5 class="member">222</h5>
+			<h5 class="member" v-html="agent"></h5>
 		</div></el-col>
 	<el-col :span="8" ><div class="brb">
 			返利总额
-			<h5 class="member">2222</h5>
+			<h5 class="member" v-html="rewardall"></h5>
 	</div>
 	</el-col>
     <el-col :span="10" :offset="1" class="mart">
@@ -23,7 +23,7 @@
     <el-col :span="10" class="mart tablet">
         <el-date-picker type="date" placeholder="选择日期" v-model="date2" style="width: 100%;"></el-date-picker>
     </el-col>
-    <el-col :span="22" :offset="1" class="search">查询</el-col>
+    <el-col :span="22" :offset="1" class="search"><div @click="searchinfo">查询</div></el-col>
     <el-col :span="10" :offset="1" class="tablet">充值总额：<span>1000</span>元</el-col>
     <el-col :span="10" :offset="2" class="tablet">返现总额：<span>1000</span>元</el-col>
      <el-table
@@ -35,7 +35,7 @@
     width="100"
       label="代理级别">
       <template scope="scope">
-      {{scope.row.dl}}
+      {{scope.row.name}}返({{scope.row.percent}}%)
       </template>
     </el-table-column>
     <el-table-column
@@ -43,7 +43,7 @@
       width="100"
       align="center">
       <template scope="scope">
-       {{scope.row.date}}
+       {{scope.row.charge}}<br>返({{scope.row.charge}})
       </template>
     </el-table-column>
     <el-table-column
@@ -51,13 +51,13 @@
     width="100"
       label="钻石消耗">
       <template scope="scope">
-          {{scope.row.date}}
+          {{scope.row.consume}}
       </template>
     </el-table-column>
     <el-table-column label="操作" align="center">
       <template scope="scope">
         <el-button
-        type="primary"
+          class="detailbtn"
           size="small"
           @click="handleEdit(scope.$index, scope.row)">明细</el-button>
       </template>
@@ -67,34 +67,85 @@
 </template>
 
 <script>
+import axios from "axios";
+import qs from "qs";
 export default {
   name: 'teamrechanger',
   data () {
     return {
       input1:null,
-      yqcode:'邀请码：011784',
+      yqcode:null,
       date1:null,
       date2:null,
-      tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          dl:'直属团队(返45%)',
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄',
-          dl:'二级团队(返10%)',
-        }]     
+      tableData: [],
+      members:null,
+      rewardall:null,
+      agent:null
+
     }
   },
   methods:{
-  	handleEdit(index, row) {
-        console.log(index, row);
+  	  handleEdit(index, row) {
+        var self = this;
+        if (index==0) {
+          this.$router.push({path: '/teamdetail'});
+        }else if(index==1){
+          this.$router.push({path: '/secdetail'});
+        }else{return}
       },
       handleDelete(index, row) {
         console.log(index, row);
-      }
+      },
+      searchinfo:function () {
+        var self =this ;
+        //console.log(self.date1);
+        if (self.date1&&self.date2) {
+          if (self.date2>=self.date1) {
+            var params={startTime:self.date1,endTime:self.date2,cid:'2',channel:'fuyang',sid:'0b2a8fd90acf4cfc1dad7b1a9e831a79'}
+          axios.post('http://pay.queyoujia.com/user/team/info',qs.stringify(params),{headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                      }}).then(function (res) {
+                         console.log(res.data.data);
+                        self.yqcode="邀请码："+res.data.data.no;
+                        self.tableData=res.data.data.list;
+                        self.members=res.data.data.member;
+                        self.rewardall=res.data.data.rewardTotal;
+                        self.agent=res.data.data.agent;
+                      }).catch(function (err) {
+                        console.log(err);
+                      })
+                    }
+                  else{
+                     self.$message({
+                      title: '警告',
+                      message: '结束时间不能不开始时间早',
+                      type: 'warning'
+                    });
+                  }    
+        }else{
+          self.$message({
+          title: '警告',
+          message: '请核实输入时间',
+          type: 'warning'
+        });
+        }}
+        
+},
+mounted:function () {
+  var self =this;
+  var params={startTime:'2017-10-22T02:59:13.738Z',endTime:'2017-10-23T02:59:13.738Z',cid:'2',channel:'fuyang',sid:'0b2a8fd90acf4cfc1dad7b1a9e831a79'};
+  axios.post('http://pay.queyoujia.com/user/team/info',qs.stringify(params),{headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                      }}).then(function (res) {
+                        console.log(res.data.data);
+                        self.yqcode="邀请码："+res.data.data.no;
+                        self.tableData=res.data.data.list;
+                        self.members=res.data.data.member;
+                        self.rewardall=res.data.data.rewardTotal;
+                        self.agent=res.data.data.agent;
+                      }).catch(function (err) {
+                        console.log(err);
+                      }); 
 }
 }
 </script>
@@ -102,12 +153,13 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 div{text-align: center;}
-.sharecode{margin:2vh 5vw;height: 5vh;border:1px solid #C0CCDA;background: #EFF2F7;border-radius: 3px;text-align: center;color: #475669;font-family: '微软雅黑';font-weight: lighter;padding-top: 1%;}
-.brb{border-bottom: 1px solid #dddddd;margin-top: 1vh;height: 8vh;color:#1F2D3D;font-size: 0.9rem;font-weight: lighter;font-family: '微软雅黑';}
+.sharecode{margin:2vh 5vw;height: 5vh;border:1px solid #C0CCDA;background: #EFF2F7;border-radius: 3px;text-align: center;color:#1f2d3d;font-family: '微软雅黑';font-weight: lighter;line-height: 5vh; border-radius: 12px;}
+.brb{border-bottom: 1px solid #dddddd;margin-top: 1vh;height: 8vh;color:#1F2D3D;font-size: 0.9rem;font-weight: bold;font-family: '微软雅黑';}
 .brrl{border-right:1px solid #dddddd; border-left:1px solid #dddddd;}
 .member{margin-top: 1vh;width: 100%;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;color: #20A0FF;font-weight: normal;}
 .mart{margin-top: 2vh;}
-.tablet{margin-bottom: 2vh;color: #1F2D3D;font-size: 0.9rem;font-weight: normal;}
-.search{color: #fff;background-color: #20a0ff;border-color: #20a0ff;padding: 7px 9px;font-size: 12px;border-radius: 4px;margin-bottom: 2vh;}
+.tablet{margin-bottom: 2vh;color: #1F2D3D;font-size: 0.9rem;font-weight: bold;}
+.search{color: #fff;background-color: #50bfff;border-color: #20a0ff;padding: 7px 9px;font-size: 14px;border-radius: 4px;margin-bottom: 2vh;}
 .search:active{background-color: #58B7FF;}
+.detailbtn{color:#50bfff;border:1px solid #50bfff;}
 </style>
