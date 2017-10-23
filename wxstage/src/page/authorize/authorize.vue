@@ -62,6 +62,6 @@ export default {
 .mrt{margin-top:2vh;}
 .btnw{width: 100%;}
 .bgtext{background-color: #EdF2F7;height: 5vh;text-align: center;line-height: 5vh;color: #324057;font-family: "Times New Roman";border-radius: 5px;font-weight:bold;font-size: 1rem;}
-.sq{background-color: #20A0FF;color: white;text-align: center;height: 5vh;line-height: 5vh;border-radius: 5px;}
+.sq{background-color: #20A0FF;color: white;text-align: center;height: 7vh;line-height: 7vh;border-radius: 5px;}
 .sq:active{background-color: #58B7FF;}
 </style>
