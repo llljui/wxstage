@@ -10,6 +10,14 @@ export default new Router({
      { path: '/',name:'首页',component: _import('layout/layout'), hidden: true },
      { path: '/login',name:'登录',component: _import('login/index'), hidden: true },
      {
+      path:'/partner',
+      component:layout,
+      redirect: '/partner',
+      hidden: true,
+      noDropdown: true,
+      children: [{ path: 'partner', name:'合伙人查询', component: _import('partner/partner') }]
+     },
+     {
       path:'/commission',
       component:layout,
       redirect: 'commission/commission',
@@ -96,7 +104,30 @@ export default new Router({
       hidden: true,
       noDropdown: true,
       children: [{ path: 'authorize', name:'代理授权', component: _import('authorize/authorize') }]
-    }
-    
+    },
+    {
+      path:'/parsearch',
+      component:layout,
+      redirect: 'parsearch/parsearch',
+      hidden: true,
+      noDropdown: true,
+      children: [{ path: 'parsearch', name:'充值查询 (合伙人)', component: _import('parsearch/parsearch') }]
+    },
+    {
+      path:'/bindtel',
+      component:layout,
+      redirect: 'bindtel/bindtel',
+      hidden: true,
+      noDropdown: true,
+      children: [{ path: 'bindtel', name:'绑定手机号', component: _import('bindtel/bindtel') }]
+    },
+    {
+      path:'/userdetail',
+      component:layout,
+      redirect: 'userdetail/userdetail',
+      hidden: true,
+      noDropdown: true,
+      children: [{ path: 'userdetail', name:'用户资料', component: _import('userdetail/userdetail') }]
+    }  
   ]
 })

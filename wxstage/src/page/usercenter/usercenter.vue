@@ -1,5 +1,29 @@
 <template>
   <div class="usercenter">
+  	<el-row class="bgrow">
+	  	<el-col :span="10" :offset="1" class="brb">用户ID</el-col>
+	  	<el-col :span="11" class="alig brb textpri">2061160</el-col>
+	</el-row>
+	<el-row class="bgrow">
+	  	<el-col :span="10" :offset="1" class="brb">我的邀请码</el-col>
+	  	<el-col :span="11" class="alig brb textpri">011784</el-col>
+	</el-row>
+	<el-row class="bgrow">
+	  	<el-col :span="10" :offset="1" class="brb">剩余钻石</el-col>
+	  	<el-col :span="11" class="alig brb textpri">10</el-col>
+	</el-row>
+	<el-row class="bgrow">
+	  	<el-col :span="10" :offset="1" class="brb"><div @click="changegame">切换游戏</div></el-col>
+	  	<el-col :span="11" class="alig brb"><div  @click="changegame"><i class="el-icon-arrow-right"></i></div></el-col>
+	</el-row>
+	<el-row class="bgrow">
+	  	<el-col :span="10" :offset="1" class="brb"><div  @click="bindtel">绑定手机号</div></el-col>
+	  	<el-col :span="11" class="alig brb"><div  @click="bindtel"><i class="el-icon-arrow-right"></i></div></el-col>
+	</el-row>
+	<el-row class="bgrow">
+	  	<el-col :span="10" :offset="1" class="brb"><div  @click="userdetail">查看个人资料</div></el-col>
+	  	<el-col :span="11" class="alig brb"><div  @click="userdetail"><i class="el-icon-arrow-right"></i></div></el-col>
+	</el-row>
   </div>
 </template>
 
@@ -10,9 +34,28 @@ export default {
     return {
       msg: 'Welcome to Your Vue.js App'
     }
+  },
+  methods:{
+  	changegame:function () {
+  		console.log(22);
+  	},
+  	userdetail:function () {
+  		    var self =this;
+  			this.$router.push({path: '/userdetail'});
+  	},
+  	bindtel:function () {
+  			var self =this;
+  			this.$router.push({path: '/bindtel'});
+  	}
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.alig{text-align: right;font-family:'微软雅黑';color: #8492A6;}
+.bgrow{background-color:white;height: 3vh;margin-top: 1vh;padding-bottom: 2vh;height: 7vh;}
+.brb{border-bottom: 1px solid #dddddd;padding-bottom: 1vh;padding-left: 2vw;padding-right: 2vw;height: 7vh;line-height: 7vh;color:#1F2D3D; }
+.textpri{color: #48576a;font-weight: lighter;font-size: 0.9rem;}
+.bgrow:active{background-color: #cFF2F7;}
+</style>

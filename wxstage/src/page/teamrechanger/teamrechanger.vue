@@ -32,31 +32,32 @@
     style="width: 100%">
     <el-table-column
     align="center"
-    width="100"
+    width="95"
       label="代理级别">
-      <template scope="scope">
+      <template slot-scope="scope">
       {{scope.row.name}}返({{scope.row.percent}}%)
       </template>
     </el-table-column>
     <el-table-column
       label="充值总额"
-      width="100"
+      width="95"
       align="center">
-      <template scope="scope">
+      <template slot-scope="scope">
        {{scope.row.charge}}<br>返({{scope.row.charge}})
       </template>
     </el-table-column>
     <el-table-column
     align="center"
-    width="100"
+    width="95"
       label="钻石消耗">
-      <template scope="scope">
+      <template slot-scope="scope">
           {{scope.row.consume}}
       </template>
     </el-table-column>
     <el-table-column label="操作" align="center">
-      <template scope="scope">
+      <template slot-scope="scope">
         <el-button
+        align="left"
           class="detailbtn"
           size="small"
           @click="handleEdit(scope.$index, scope.row)">明细</el-button>
@@ -162,4 +163,5 @@ div{text-align: center;}
 .search{border-color: #20a0ff;padding: 7px 9px;font-size: 14px;border-radius: 4px;margin-bottom: 2vh;}
 .search button{width: 100%;}
 .detailbtn{color:#50bfff;border:1px solid #50bfff;}
+.detailbtn[data-v-5213ce80]{margin-left: -2vw;}
 </style>

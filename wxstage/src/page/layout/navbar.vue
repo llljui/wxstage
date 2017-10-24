@@ -7,6 +7,7 @@
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item><router-link to="/teamrechanger">团队充值统计</router-link></el-dropdown-item>
               <el-dropdown-item><router-link to="/perrechanger">个人充值明细</router-link></el-dropdown-item>
+              <el-dropdown-item><router-link to="/parsearch">合伙人查询</router-link></el-dropdown-item>
             </el-dropdown-menu>
       </el-dropdown>
       <el-dropdown trigger="click">
@@ -52,7 +53,7 @@ export default {
       },
    computed:{
     keys(){
-      console.log(window.screen);
+      //console.log(window.screen);
     }
    },
    mounted(){

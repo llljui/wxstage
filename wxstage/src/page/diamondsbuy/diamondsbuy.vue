@@ -22,19 +22,19 @@
     <el-table-column
       align="center"
       label="钻石数量">
-      <template scope="scope">
+      <template slot-scope="scope">
         <span>{{ scope.row.date }}<br>(返40%)</span>
       </template>
     </el-table-column>
     <el-table-column
       align="center"
       label="售价">
-      <template scope="scope">
+      <template slot-scope="scope">
 		{{ scope.row.name }}
       </template>
     </el-table-column>
     <el-table-column label="操作" align="center">
-      <template scope="scope">
+      <template slot-scope="scope">
         <el-button
           size="small"
           class="buybtn"
@@ -89,7 +89,7 @@ export default {
 .buyhead{width: 100%;height: 14vh;}
 .tc{text-align: center;height: 100%;}
 .tc h5{font-size: 0.95rem;color: #27313c;margin-top: 2vh;}
-.tc span{font-size: 1rem;color: #1F2D3D;margin-top: 2vh;display: block;color:#58B7FF;font-weight: bold;font-family: '微软雅黑';}
+.tc span{font-size: 1rem;color: #1F2D3D;margin-top: 2vh;display: block;color:#58B7FF;font-weight: normal;font-family: '微软雅黑';}
 .buytitle{background-color: #e9ecf1;height: 8vh;display: block;}
 .buycontent{}
 .buybtn[data-v-6d3b226a]{color:#50bfff;font-weight: bold;border:1px solid #50bfff;}

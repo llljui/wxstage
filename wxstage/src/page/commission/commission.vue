@@ -19,7 +19,8 @@
     </el-col>
     <el-col :span="22" :offset="1" class="searchbtn"><div @click="searchinfo" class="searchbtn">查询</div></el-col>
 	<el-table
-	height="330"
+		:key="tabheight"
+		:height="tabH"
 		class="mart"
 	    :data="tableData"
 	    border
@@ -50,18 +51,18 @@
 	      label="状态">
 	    </el-table-column>
   	</el-table>
-  	<div class="block">
-    <el-pagination
-    class="pagtab"
-    small
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page.sync="currentPage3"
-      :page-size="1"
-      layout="prev, pager, next, jumper"
-      :total="1000">
-    </el-pagination>
-  </div>
+  	 <div class="block">
+	 	<el-pagination
+	 	  class="pagetab"
+	 	  small
+	      @size-change="handleSizeChange"
+	      @current-change="handleCurrentChange"
+	      :current-page.sync="currentPage3"
+	      :page-size="100"
+	      layout="prev, pager, next, jumper"
+	      :total="1000">
+	    </el-pagination>
+	  </div>
   </div>
 </template>
 
@@ -95,7 +96,56 @@ export default {
 	      name: '王小虎',
 	      address: '66565',
 	      status:'返现'
+	    },
+	     {
+	      date: '2016-05-04',
+	      name: '王小虎',
+	      address: '10',
+	      status:'已到账'
+	    },
+	     {
+	      date: '2016-05-04',
+	      name: '王小虎',
+	      address: '10',
+	      status:'已到账'
+	    },
+	     {
+	      date: '2016-05-04',
+	      name: '王小虎',
+	      address: '10',
+	      status:'已到账'
+	    },
+	     {
+	      date: '2016-05-04',
+	      name: '王小虎',
+	      address: '10',
+	      status:'已到账'
+	    },
+	     {
+	      date: '2016-05-04',
+	      name: '王小虎',
+	      address: '10',
+	      status:'已到账'
+	    },
+	     {
+	      date: '2016-05-04',
+	      name: '王小虎',
+	      address: '10',
+	      status:'已到账'
+	    },
+	     {
+	      date: '2016-05-04',
+	      name: '王小虎',
+	      address: '10',
+	      status:'已到账'
+	    },
+	     {
+	      date: '2016-05-04',
+	      name: '王小虎',
+	      address: '10',
+	      status:'已到账'
 	    }],
+	    tabH:null
 
     }
   },
@@ -109,6 +159,26 @@ export default {
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
       }
+  },
+  computed:{
+  	tabheight(){
+  		var self =this;
+  		var device_type = navigator.userAgent;
+  		console.log(window.screen.availHeight);
+  		if (device_type.indexOf('Nexus')!=-1) {
+  			console.log('Nexus');
+  			self.tabH=(window.screen.availHeight-500+(560/window.screen.availHeight)*90);
+  			console.log(self.tabH);
+  		}else{
+  			if (window.screen.availHeight<570) {
+  				self.tabH='250';
+  			}else{
+  				self.tabH=(window.screen.availHeight-500+((560/window.screen.availHeight)*140));		
+  				console.log(device_type);
+  			}
+  		}
+  		
+  	}
   }
 }
 </script>
@@ -126,5 +196,7 @@ export default {
 .detailbtn{color:#50bfff;border:1px solid #50bfff;}
 .searchbtn{text-align:center;background-color: #58B7FF;height: 6vh;color: white;line-height: 6vh;border-radius: 5px;margin-bottom: 2vh;}
 .searchbtn:active{background-color: #20A0FF;}
-.pagtab{float: right;position: absolute;right: 0;right:1vw;margin-top:2vh;}
+.pagetab{position: absolute;bottom:10vh;}
+.el-pagination{margin-left: -2.8vw;}
+.tablesc{width: 100%;}
 </style>
