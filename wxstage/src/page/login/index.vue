@@ -1,9 +1,9 @@
 <template>
   <div class="login">
   	<el-col :span="24"><header>微信登录</header></el-col>
-  	<img src="../../assets/logo.png" alt="" class="logo" width="30%">
+  	<img src="../../assets/logo.jpg" alt="" class="logo" width="30%">
   	<el-col :span="24" class="title">
-	  	<h5>八道雀神</h5>
+	  	<h5>微信登录</h5>
   	</el-col>
   	<h5 class="shouquan">网页由该公总号开发，请确认授权以下信息</h5>
   	<ul>
@@ -13,7 +13,8 @@
   </div>
 </template>
 <script>
-import '../../assets/wx.js'
+import '../../assets/wx.js';
+/*import geturlpara from '../../geturlkey.js'*/
 import axios from 'axios';
 import qs from 'qs';
 export default {
@@ -26,15 +27,25 @@ export default {
   methods:{
   	login:function () {
   		var self=this;
-  		/*'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx520c15f417810387&redirect_uri=https%3A%2F%2Fchong.qq.com%2Fphp%2Findex.php%3Fd%3D%26c%3DwxAdapter%26m%3DmobileDeal%26showwxpaytitle%3D1%26vb2ctag%3D4_2030_5_1194_60&response_type=code&scope=snsapi_base&state=123#wechat_redirect '*/
-  		var params={'cid':'2','channel':'fuyang',appid:'APPID',redirect_uri:'REDIRECT_URI',response_type:'code',scope:'SCOPE',state:'STATE#wechat_redirect'};
-  		axios.post('http://pay.queyoujia.com/auth/login/weixinV2',qs.stringify(params),{headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                      }}).then(function (res) {
-                      	console.log(res);
-                      }).catch(function (err) {
-                      	console.log(err);
-                      })
+      var cid = null;
+      var channel = null;
+      if (location.search.indexOf('cid=1')!=-1) {
+        cid='1';
+        channel='hz'
+        localStorage['cid'] = cid;
+        localStorage['channel'] = channel;
+        window.location.href = 'http://' + window.location.host + '/auth/login/weixinV2?cid=' + cid + '&channel=' + channel;
+      }else if(location.search.indexOf('cid=2')!=-1){
+        cid='2';
+        channel='fuyang'
+        localStorage['cid'] = cid;
+        localStorage['channel'] = channel;
+        window.location.href = 'http://' + window.location.host + '/auth/login/weixinV2?cid=' + cid + '&channel=' + channel;
+      }else{
+        return;
+      }
+  	 
+    
   	}
   }
 }
