@@ -29,24 +29,35 @@ export default {
   		var self=this;
       var cid = null;
       var channel = null;
-      if (location.search.indexOf('cid=1')!=-1) {
+      console.log(location.search);
+      if (location.search.indexOf('cid=1')!=-1&&location.search.indexOf('channel=hz')!=-1) {
+        console.log(2);
         cid='1';
         channel='hz'
-        localStorage['cid'] = cid;
-        localStorage['channel'] = channel;
+        sessionStorage['cid'] = cid;
+        sessionStorage['channel'] = channel;
         window.location.href = 'http://' + window.location.host + '/auth/login/weixinV2?cid=' + cid + '&channel=' + channel;
-      }else if(location.search.indexOf('cid=2')!=-1){
+      }else if(location.search.indexOf('cid=2')!=-1&&location.search.indexOf('channel=fuyang')!=-1){
+        console.log(3);
         cid='2';
         channel='fuyang'
-        localStorage['cid'] = cid;
-        localStorage['channel'] = channel;
+        sessionStorage['cid'] = cid;
+        sessionStorage['channel'] = channel;
         window.location.href = 'http://' + window.location.host + '/auth/login/weixinV2?cid=' + cid + '&channel=' + channel;
       }else{
+         console.log(1);
         return;
       }
   	 
     
   	}
+  },
+  mounted(){
+    if (location.search.indexOf('cid=1')!=-1&&location.search.indexOf('channel=hz')!=-1) {
+      document.title="全民大冶后台";
+    }else if(location.search.indexOf('cid=2')!=-1&&location.search.indexOf('channel=fuyang')!=-1){
+      document.title="八道雀神后台";
+    }else{console.log('其他标题');document.title="公总号后台";}
   }
 }
 </script>

@@ -16,8 +16,7 @@ export default {
     return {
     
     }
-  },
-  mounted(){}
+  }
    /* var arr,reg=new RegExp("(^| )"+sid+"=([^;]*)(;|$)");
     if(arr=document.cookie.match(reg));
     console.log(unescape(arr[2]))

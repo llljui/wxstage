@@ -58,8 +58,22 @@ export default {
     }
    },
    mounted(){
-
-   }
+    var self=this;
+    if (location.search.indexOf('cid=1')!=-1&&location.search.indexOf('channel=hz')!=-1) {
+      document.title="全民大冶后台";
+    }else if(location.search.indexOf('cid=2')!=-1&&location.search.indexOf('channel=fuyang')!=-1){
+      document.title="八道雀神后台";
+    }else{console.log('其他标题')}
+    var arr,reg=new RegExp("(^| )"+'sid'+"=([^;]*)(;|$)");
+    if (arr=document.cookie.match(reg)) {
+      console.log('身份存在');
+      //console.log(unescape(arr[2]));
+      self.$router.push({path:'/teamrechanger'});
+    }else{
+      console.log('身份不存在');
+      self.$router.push({path:'/login'});
+    }
+  }
 }
 </script>
 
