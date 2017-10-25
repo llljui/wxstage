@@ -111,7 +111,7 @@ export default new Router({
       redirect: 'parsearch/parsearch',
       hidden: true,
       noDropdown: true,
-      children: [{ path: 'parsearch', name:'充值查询 (合伙人)', component: _import('parsearch/parsearch') }]
+      children: [{ path: 'parsearch', name:'充值概况 (合伙人)', component: _import('parsearch/parsearch') }]
     },
     {
       path:'/bindtel',
@@ -128,6 +128,14 @@ export default new Router({
       hidden: true,
       noDropdown: true,
       children: [{ path: 'userdetail', name:'用户资料', component: _import('userdetail/userdetail') }]
+    },
+    {
+      path:'/perdetail',
+      component:layout,
+      redirect: 'perdetail/perdetail',
+      hidden: true,
+      noDropdown: true,
+      children: [{ path: 'perdetail', name:'充值查询(合伙人)', component: _import('perdetail/perdetail') }]
     }  
   ]
 })

@@ -22,9 +22,10 @@ export default {
             self.rightt='钻石剩余:35';
              self.pdr='10vw';
         }else if(self.$route.name=='我的推广员'){
-            self.rightt='推广员列表:40人';
+             self.rightt='推广员列表:40人';
              self.pdr='10vw';
         }else{
+          self.rightt=null;
             self.pdr='10vw';
         }
       }
@@ -44,5 +45,5 @@ header{font-size: 1.1rem;font-family: '微软雅黑';line-height: 6vh;display: b
 .myheader{text-align: center;background: #1D8CE0;height:7vh;padding-top: 2%;color: white;line-height: 5vh;}
 .homeleft{float: left;margin-left: 3vw;}
 .el-icon-fa-home:before{font-size:1.9rem;}
-.rts{text-align: right;float: right;font-size: 0.7rem;position: fixed;top: 2vh;right: 5vw;}
+.rts{text-align: right;float: right;font-size: 0.7rem;position: absolute;top: 2vh;right: 5vw;}
 </style>

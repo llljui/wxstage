@@ -12,8 +12,8 @@
   	<el-button class="loginbtn" type="primary" @click="login">登录</el-button>
   </div>
 </template>
-
 <script>
+import '../../assets/wx.js'
 import axios from 'axios';
 import qs from 'qs';
 export default {
@@ -27,8 +27,8 @@ export default {
   	login:function () {
   		var self=this;
   		/*'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx520c15f417810387&redirect_uri=https%3A%2F%2Fchong.qq.com%2Fphp%2Findex.php%3Fd%3D%26c%3DwxAdapter%26m%3DmobileDeal%26showwxpaytitle%3D1%26vb2ctag%3D4_2030_5_1194_60&response_type=code&scope=snsapi_base&state=123#wechat_redirect '*/
-  		var params={appid:'APPID',redirect_uri:'REDIRECT_URI',response_type:'code',scope:'SCOPE',state:'STATE#wechat_redirect'};
-  		axios.post('https://open.weixin.qq.com/connect/oauth2/authorize',qs.stringify(params),{headers: {
+  		var params={'cid':'2','channel':'fuyang',appid:'APPID',redirect_uri:'REDIRECT_URI',response_type:'code',scope:'SCOPE',state:'STATE#wechat_redirect'};
+  		axios.post('http://pay.queyoujia.com/auth/login/weixinV2',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
                       	console.log(res);

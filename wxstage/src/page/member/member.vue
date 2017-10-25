@@ -47,7 +47,7 @@
         @current-change="handleCurrentChange"
         :current-page.sync="currentPage3"
         :page-size="100"
-        layout="prev, pager, next, jumper"
+        layout="prev,next, jumper"
         :total="1000">
       </el-pagination>
   </div>
@@ -156,6 +156,6 @@ export default {
 .searchbtn{margin-top: 2vh;color: white;text-align: center;border-radius: 3px;margin-bottom: 3vh;}
 .block{margin-top: 3vh;float: right;}
 .pagetab{position: absolute;bottom:10vh;}
-.el-pagination{margin-left: -2.8vw;}
+/* .el-pagination{margin-left: -2.8vw;} */
 .tablesc{width: 100%;}
 </style>
