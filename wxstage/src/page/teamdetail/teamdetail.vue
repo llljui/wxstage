@@ -1,4 +1,5 @@
 <template>
+  <transition name="fade" mode="in-out">
   <div class="teamdetail">
   	<el-col :span="10" :offset="1" class="mart">
         <el-date-picker type="date" placeholder="选择日期" v-model="date1" style="width: 100%;"></el-date-picker>
@@ -11,11 +12,11 @@
     	<el-input placeholder="请输入游戏ID"></el-input>
     </el-col>
     <el-col :span='22' :offset="1" class="mart serbtn">
-   		<div>查询</div>
+   		<el-button @click="searchinfo" class="btnser" type="primary">查询</el-button>
 	</el-col>
-	<el-col :span="11" :offset="1" class="cusdetail" v-bind:class="{bgtext:tabbg1}"><div @click="tabbg(1)">钻石消耗明细</div></el-col>
-	<el-col :span="11" class="recdetail" v-bind:class="{bgtext:tabbg2}"><div @click="tabbg(2)">充值明细</div></el-col>
-	<div v-bind:style="{display:con1}">
+<el-col :span="11" :offset="1" class="cusdetail" v-bind:class="{bgtext:tabbg1}" ><div @click="tabbg(1)">钻石消耗明细</div></el-col>
+<el-col :span="11" class="recdetail" v-bind:class="{bgtext:tabbg2}"><div @click="tabbg(2)">充值明细</div></el-col>
+	<div v-show='isShow1' :style="{display:showbg1}">
 		<el-col :span="11" :offset="1" class="rechargeM">充值金额<br><span class="textb">1200</span></el-col>
 		<el-col :span="11" class="returndetail">返利总额<br><span class="textb">1200</span></el-col>
 		 <el-table
@@ -45,7 +46,7 @@
 		    </el-table-column>
 		 </el-table>
 	</div>
-	<div v-bind:style="{display:con2}">
+	<div v-show='isShow2'>
 	<el-col :span="22" :offset='1' class="mart brb">钻石消耗总额：<span class="textb">10000元</span></el-col>
 	<el-table
 		    :data="tableData2"
@@ -54,30 +55,37 @@
 		    style="width: 100%;">
 		    <el-table-column
 		      prop="date"
+            min-width="100"
 		      align="center"
 		      label="游戏ID">
 		    </el-table-column>
 		    <el-table-column
 		      prop="name"
+           min-width="100"
 		      align="center"
 		      label="游戏昵称">
 		    </el-table-column>
 		    <el-table-column
 		      prop="address"
+            min-width="100"
 		      align="center"
 		      label="充值金额">
 		    </el-table-column>
 		    <el-table-column
 		      prop="address"
 		      align="center"
+          min-width="100"
 		      label="充值时间">
 		    </el-table-column>
 		 </el-table>
 	</div>
   </div>
+</transition>
 </template>
 
 <script>
+import axios from 'axios'
+import qs from 'qs'
 export default {
   name: 'teamdetail',
   data () {
@@ -85,10 +93,6 @@ export default {
        activeName: 'second',
        date1:null,
        date2:null,
-       tabbg1:true,
-       tabbg2:false,
-       con1:'none',
-       con2:'block',
         tableData3: [{
           date: '2016744',
           name: '王小虎',
@@ -146,7 +150,13 @@ export default {
           date: '2016747',
           name: '王小虎',
           address: '10000'
-        }]
+        }],
+        tabbg1:true,
+        tabbg2:false,
+        isShow1:false,
+        isShow2:false,
+        showbg1:'block',
+        showbg2:'none'
     }
   },
   methods:{
@@ -154,24 +164,47 @@ export default {
   	 	var self =this;
         console.log(tab, event);
       },
-      tabbg:function (val) {
+      tabbg(val) {
       	if (val==1) {
+          console.log(self.isShow1);
       		self.tabbg1=true;
       		self.tabbg2=false;
-      		self.con1='block';
-      		self.con2='none';
-      		console.log(1);
-      		console.log(self.con2);
-
+      		self.isShow1=true;
+      		self.isShow2=false;
       	}else if(val==2){
-			console.log(2);
-			self.tabbg1=false;
-      		self.tabbg2=true;
-      		self.con1='none';
-      		self.con2='block';
-      		console.log(self.con2);
+          console.log(self.isShow2);
+		    	self.tabbg1=false;
+          self.tabbg2=true;
+      	  self.isShow1=false;
+          self.isShow2=true;
       	}else{return;}
+      },
+      searchinfo:function(){
+        var self =this ;
+        var params={'uid':'2061160','startTime':'','endTime':'','cid':'2','channel':'fuyang'}
+        axios.post('http://pay.queyoujia.com/user/charge/member',qs.stringify(params),{headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                      }}).then(function(res){
+                        console.log(res);
+        }).catch(function (err) {
+          console.log(err);
+        })
+         var params2={'uid':'2061160','startTime':'','endTime':'','cid':'2','channel':'fuyang'}
+        axios.post('http://pay.queyoujia.com/user/consume/member',qs.stringify(params2),{headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                      }}).then(function(res){
+                        console.log(res);
+        }).catch(function (err) {
+          console.log(err);
+        })          
       }
+  },
+  mounted(){
+    var self =this ;
+    self.isShow1=false;
+    self.isShow2=true;
+    self.tabbg1=true;
+    self.tabbg2=false;
   }
 }
 </script>
@@ -188,4 +221,11 @@ export default {
 .textb{color: #20A0FF;}
 .bgtext{color: white;background-color:#20a0ff;}
 .brb{border-bottom: 1px solid #ddd;padding-bottom: 1vh;margin-bottom: 1vh;}
+.btnser{width: 100%;height: 5vh;line-height: 2vh}
+.fade-enter-active, .fade-leave-active {
+          transition: opacity .5s
+        }
+        .fade-enter, .fade-leave-active {
+          opacity: 0
+        }
 </style>

@@ -24,7 +24,7 @@ export default {
   	 getid:function () {
   	 var self =this;
   	 console.log(33);
-  	  var params={uid:'2061160',cid:'2',channel:'fuyang',token:"vkvvSY710d4ee8",told:'2061160',sid:'626b61d318811b48cfb7303e0c016e92'}//参数
+  	  var params={uid:self.uids,cid:'2',channel:'fuyang',token:"vkvvSY710d4ee8",told:'2061160',sid:'626b61d318811b48cfb7303e0c016e92'}//参数
           axios.post('http://pay.queyoujia.com/user/check',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
@@ -43,7 +43,7 @@ export default {
   },
   besure:function () {
   	var self =this;
-  	 var params={uid:'2061160',cid:'2',channel:'fuyang',token:"vkvvSY710d4ee8",told:'2061160',sid:'626b61d318811b48cfb7303e0c016e92',amount:self.count}//参数
+  	 var params={uid:self.uids,cid:'2',channel:'fuyang',token:"vkvvSY710d4ee8",told:'2061160',sid:'626b61d318811b48cfb7303e0c016e92',amount:self.count}//参数
   	  axios.post('http://pay.queyoujia.com/user/transfer',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {

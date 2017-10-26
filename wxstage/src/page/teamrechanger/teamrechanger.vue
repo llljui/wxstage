@@ -1,4 +1,5 @@
 <template>
+  <transition name="fade" mode="in-out">
   <div class="teamrechanger">
   	<el-col :span="22" class="sharecode" v-html="yqcode"></el-col>
 	<el-col :span="8" >
@@ -17,15 +18,15 @@
 	</div>
 	</el-col>
     <el-col :span="10" :offset="1" class="mart">
-        <el-date-picker type="date" placeholder="选择日期" v-model="date1" style="width: 100%;"></el-date-picker>
+        <el-date-picker :default-value="yesdate" type="date" placeholder="选择日期" v-model="date1" style="width: 100%;"></el-date-picker>
     </el-col>
      <el-col :span="2" class="mart">-</el-col>
     <el-col :span="10" class="mart tablet">
-        <el-date-picker type="date" placeholder="选择日期" v-model="date2" style="width: 100%;"></el-date-picker>
+        <el-date-picker :default-value="todaydate" type="date" placeholder="选择日期" v-model="date2" style="width: 100%;"></el-date-picker>
     </el-col>
     <el-col :span="22" :offset="1" class="search"><el-button width="100%" @click="searchinfo" type="primary">查询</el-button></el-col>
-    <el-col :span="10" :offset="1" class="tablet">充值总额：<span>1000</span>元</el-col>
-    <el-col :span="10" :offset="2" class="tablet">返现总额：<span>1000</span>元</el-col>
+    <el-col :span="10" :offset="1" class="tablet">充值总额：<span>{{rechargeall}}</span>元</el-col>
+    <el-col :span="10" :offset="2" class="tablet">返现总额：<span>{{returnall}}</span>元</el-col>
      <el-table
     :data="tableData"
     border
@@ -65,6 +66,7 @@
     </el-table-column>
   </el-table>
   </div>
+</transition>
 </template>
 
 <script>
@@ -76,13 +78,16 @@ export default {
     return {
       input1:null,
       yqcode:null,
-      date1:null,
-      date2:null,
+      date1:'',
+      date2:'',
       tableData: [],
       members:null,
       rewardall:null,
-      agent:null
-
+      agent:null,
+      rechargeall:null,
+      returnall:null,
+      yesdate:null,
+      todaydate:null
     }
   },
   methods:{
@@ -106,7 +111,8 @@ export default {
           axios.post('http://pay.queyoujia.com/user/team/info',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
-                         console.log(res.data.data);
+                        //console.log(res.data.data);
+                        self.tableData=[];
                         self.yqcode="邀请码："+res.data.data.no;
                         self.tableData=res.data.data.list;
                         self.members=res.data.data.member;
@@ -138,15 +144,21 @@ mounted:function () {
   axios.post('http://pay.queyoujia.com/user/team/info',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
-                        console.log(res.data.data);
+                       // console.log(res.data.data);
                         self.yqcode="邀请码："+res.data.data.no;
                         self.tableData=res.data.data.list;
                         self.members=res.data.data.member;
                         self.rewardall=res.data.data.rewardTotal;
                         self.agent=res.data.data.agent;
+                        self.rechargeall=res.data.data.chargeTotal;
+                        self.returnall=res.data.data.rewardTotal;
                       }).catch(function (err) {
                         console.log(err);
                       }); 
+                      /*var now = new Date();
+                      now.setHours('00', '00', '00', '0');
+                      self.yesdate=now.getTime()/1000-86400;
+                      self.todaydate=now.getTime()/1000;*///获取凌晨时间
 }
 }
 </script>
@@ -164,4 +176,10 @@ div{text-align: center;}
 .search button{width: 100%;}
 .detailbtn{color:#50bfff;border:1px solid #50bfff;}
 .detailbtn[data-v-5213ce80]{margin-left: -2vw;}
+.fade-enter-active, .fade-leave-active {
+          transition: opacity .5s
+        }
+        .fade-enter, .fade-leave-active {
+          opacity: 0
+        }
 </style>

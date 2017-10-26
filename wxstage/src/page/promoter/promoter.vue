@@ -1,6 +1,7 @@
 <template>
+  <transition name="fade" mode="in-out">
   <div class="promoter">
-  	<el-col :span="14" :offset="1" class="mrt"><el-input placeholder=""></el-input></el-col>
+  	<el-col :span="14" :offset="1" class="mrt"><el-input placeholder="请输入推广员ID"></el-input></el-col>
   	<el-col :span="7" :offset="1" class="searchbtn"><el-button type="primary" style="width:100%">查询</el-button></el-col>
   	<el-table
     :key="tabheight"
@@ -52,6 +53,7 @@
       :total="1000">
     </el-pagination>
   </div>
+</transition>
 </template>
 
 <script>
@@ -124,6 +126,9 @@ export default {
       },
        handleEdit(index, row) {
         console.log(index, row);
+        var self =this ;
+          sessionStorage.promoterid=row.uid;
+          self.$router.push({path:'/promoterdetail'})
       },
       handleDelete(index, row) {
         console.log(index, row);
@@ -161,4 +166,10 @@ export default {
 /* .el-pagination{margin-left: -2vw;} */
 .pagetab{position: absolute;bottom:10vh;}
 .tablesc{width: 100%;}
+.fade-enter-active, .fade-leave-active {
+          transition: opacity .5s
+        }
+        .fade-enter, .fade-leave-active {
+          opacity: 0
+        }
 </style>

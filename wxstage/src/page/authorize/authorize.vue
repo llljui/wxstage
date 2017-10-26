@@ -22,8 +22,8 @@ export default {
   	promoter:function () {
   		console.log(454);
   		var self =this;
-  		var params={hz:'hz',uid:self.uids,sid:'06aa99f0c018c78fe271e956f85ab524'}
-  		axios.post('http://monkey.queyoujia.com/promoter/agent',qs.stringify(params),{headers: {
+  		var params={hz:'hz',uid:self.uids,token:"vkvvSY710d4ee8",told:'2061160',sid:'626b61d318811b48cfb7303e0c016e92',cid:'2',channel:'fuyang'}
+  		axios.post('http://pay.queyoujia.com/user/promoter/auth',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
                         console.log(res);
@@ -38,11 +38,11 @@ export default {
   	},
   	searchinfo:function () {
   		var self =this;
-  		var params={hz:'hz',uid:self.uids,sid:'06aa99f0c018c78fe271e956f85ab524'}
-  		axios.post('http://monkey.queyoujia.com/user/check',qs.stringify(params),{headers: {
+  		var params={hz:'hz',uid:self.uids,token:"vkvvSY710d4ee8",told:'2061160',sid:'626b61d318811b48cfb7303e0c016e92',cid:'2',channel:'fuyang'}
+  		axios.post('http://pay.queyoujia.com/user/member/list',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
-                        /*console.log(res);*/
+                        console.log(res);
                         if (true) {
 
                         }else{

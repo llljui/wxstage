@@ -1,7 +1,8 @@
 <template>
+  <transition name="fade" mode="in-out">
   <div class="member">
-  	<el-col :span="14" :offset="1" class="mrt"><el-input placeholder=""></el-input></el-col>
-  	<el-col :span="7" :offset="1" class="searchbtn"><el-button type="primary" style="width:100%">查询</el-button></el-col>
+  	<el-col :span="14" :offset="1" class="mrt"><el-input placeholder="请输入用户ID" v-model="userid"></el-input></el-col>
+  	<el-col :span="7" :offset="1" class="searchbtn"><el-button type="primary" style="width:100%" @click="searchmember">查询</el-button></el-col>
   	<el-table
     :key="tabheight"
     :height="tabH"
@@ -10,19 +11,20 @@
     :data="tableData3"
     border>
     <el-table-column
-      prop="name"
+      prop="nickname"
       align="center"
+      min-width="100"
       label="昵称">
     </el-table-column>
     <el-table-column
-      prop="name"
+      prop="consume"
       align="center"
-      width="120"
+      min-width="120"
       sortable
       label="昨日消耗">
     </el-table-column>
     <el-table-column
-      prop="address"
+      prop="payment"
       align="center"
       sortable
       width="120"
@@ -40,7 +42,7 @@
       </template>
     </el-table-column>
   </el-table>
-    <el-pagination
+    <!-- <el-pagination
       class="pagetab"
       small
         @size-change="handleSizeChange"
@@ -49,68 +51,24 @@
         :page-size="100"
         layout="prev,next, jumper"
         :total="1000">
-      </el-pagination>
+      </el-pagination> -->
   </div>
+</transition>
 </template>
 
 <script>
+import axios from 'axios'
+import qs from 'qs'
 export default {
   name: 'member',
   data () {
     return {
-     tableData3: [{
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '100000'
-        }, {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '100000'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-           address: '100000'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-           address: '100000'
-        }, {
-          date: '2016-05-08',
-          name: '王小虎',
-           address: '100000'
-        }, {
-          date: '2016-05-06',
-          name: '王小虎',
-          address: '100000'
-        }, {
-          date: '2016-05-07',
-          name: '王小虎',
-          address: '100000'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-           address: '100000'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-           address: '100000'
-        }, {
-          date: '2016-05-08',
-          name: '王小虎',
-           address: '100000'
-        }, {
-          date: '2016-05-06',
-          name: '王小虎',
-          address: '100000'
-        }, {
-          date: '2016-05-07',
-          name: '王小虎',
-          address: '100000'
-        }],
+     tableData3: [],
         currentPage1: 5,
         currentPage2: 5,
         currentPage3: 5,
-        currentPage4: 4
+        currentPage4: 4,
+        userid:null
     }
   },
   methods:{
@@ -121,10 +79,26 @@ export default {
         console.log(`当前页: ${val}`);
       },
        handleEdit(index, row) {
-        console.log(index, row);
+        var self =this ;
+        sessionStorage.memberuid=row.uid;
+        //console.log(sessionStorage.memberuid);//http://pay.queyoujia.com/user/member/list?uid=&cid=2&channel=fuyang
+        self.$router.push({path:'/memberdetail'})
       },
       handleDelete(index, row) {
         console.log(index, row);
+      },
+      searchmember:function () {
+        var self =this;
+        var params={uid:self.userid,cid:'2',channel:'fuyang',sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'}
+        axios.post('http://pay.queyoujia.com/user/member/list',qs.stringify(params),{headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                      }}).then(function (res) {
+                        console.log(res);
+                        self.tableData3=[];
+                        self.tableData3=res.data.data.list;
+                      }).catch(function (err) {
+                        console.log(err)
+                      })
       }
   },
   computed:{
@@ -146,6 +120,18 @@ export default {
       }
       
     }
+  },
+  mounted(){
+    var self =this ;
+    var params={cid:'2',channel:'fuyang',sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'}
+    axios.post('http://pay.queyoujia.com/user/member/list',qs.stringify(params),{headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                      }}).then(function (res) {
+                        console.log(res);
+                        self.tableData3=res.data.data.list;
+                      }).catch(function (err) {
+                        console.log(err);
+                      })
   }
 }
 </script>
@@ -158,4 +144,10 @@ export default {
 .pagetab{position: absolute;bottom:10vh;}
 /* .el-pagination{margin-left: -2.8vw;} */
 .tablesc{width: 100%;}
+.fade-enter-active, .fade-leave-active {
+          transition: opacity .5s
+        }
+        .fade-enter, .fade-leave-active {
+          opacity: 0
+        }
 </style>

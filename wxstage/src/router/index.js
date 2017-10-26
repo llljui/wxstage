@@ -136,6 +136,30 @@ export default new Router({
       hidden: true,
       noDropdown: true,
       children: [{ path: 'perdetail', name:'充值查询(合伙人)', component: _import('perdetail/perdetail') }]
+    },
+    {
+      path:'/memberdetail',
+      component:layout,
+      redirect: 'memberdetail/memberdetail',
+      hidden: true,
+      noDropdown: true,
+      children: [{ path: 'memberdetail', name:'会员明细', component: _import('memberdetail/memberdetail') }]
+    },
+    {
+      path:'/memberdetail',
+      component:layout,
+      redirect: 'memberdetail/memberdetail',
+      hidden: true,
+      noDropdown: true,
+      children: [{ path: 'memberdetail', name:'会员明细', component: _import('memberdetail/memberdetail') }]
+    },
+    {
+      path:'/promoterdetail',
+      component:layout,
+      redirect: 'promoterdetail/promoterdetail',
+      hidden: true,
+      noDropdown: true,
+      children: [{ path: 'promoterdetail', name:'会员明细', component: _import('promoterdetail/promoterdetail') }]
     }  
   ]
 })

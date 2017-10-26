@@ -1,4 +1,5 @@
 <template>
+	<transition name="fade" mode="in-out">
   <div class="usercenter">
   	<el-row class="bgrow">
 	  	<el-col :span="10" :offset="1" class="brb">用户ID</el-col>
@@ -25,6 +26,7 @@
 	  	<el-col :span="11" class="alig brb"><div  @click="userdetail"><i class="el-icon-arrow-right"></i></div></el-col>
 	</el-row>
   </div>
+</transition>
 </template>
 
 <script>
@@ -58,4 +60,10 @@ export default {
 .brb{border-bottom: 1px solid #dddddd;padding-bottom: 1vh;padding-left: 2vw;padding-right: 2vw;height: 7vh;line-height: 7vh;color:#1F2D3D; }
 .textpri{color: #48576a;font-weight: lighter;font-size: 0.9rem;}
 .bgrow:active{background-color: #cFF2F7;}
+.fade-enter-active, .fade-leave-active {
+          transition: opacity .5s
+        }
+        .fade-enter, .fade-leave-active {
+          opacity: 0
+        }
 </style>

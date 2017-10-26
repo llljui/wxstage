@@ -8,7 +8,7 @@
               <el-dropdown-item><router-link to="/teamrechanger">团队充值统计</router-link></el-dropdown-item>
               <el-dropdown-item><router-link to="/perrechanger">个人充值明细</router-link></el-dropdown-item>
               <el-dropdown-item><router-link to="/parsearch">合伙人充值概况</router-link></el-dropdown-item>
-               <el-dropdown-item><router-link to="/perdetail">合伙人充值查询</router-link></el-dropdown-item>
+               <!-- <el-dropdown-item><router-link to="/perdetail">合伙人充值查询</router-link></el-dropdown-item> -->
             </el-dropdown-menu>
       </el-dropdown>
       <el-dropdown trigger="click">
@@ -59,7 +59,7 @@ export default {
    },
    mounted(){
     var self=this;
-    if (location.search.indexOf('cid=1')!=-1&&location.search.indexOf('channel=hz')!=-1) {
+   /* if (location.search.indexOf('cid=1')!=-1&&location.search.indexOf('channel=hz')!=-1) {
       document.title="全民大冶后台";
     }else if(location.search.indexOf('cid=2')!=-1&&location.search.indexOf('channel=fuyang')!=-1){
       document.title="八道雀神后台";
@@ -72,7 +72,7 @@ export default {
     }else{
       console.log('身份不存在');
       self.$router.push({path:'/login'});
-    }
+    }*/
   }
 }
 </script>

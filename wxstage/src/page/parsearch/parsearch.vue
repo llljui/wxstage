@@ -1,93 +1,65 @@
 <template>
+  <transition name="fade" mode="in-out">
   <div class="parsearch">
   	<el-row>
 	  	<el-col :span="11" :offset="1" class="mart">
 	  		<h5>总推广代理</h5>
-	  		<span>0</span>
+	  		<span>{{promoterNumber}}</span>
 	  	</el-col>
 	  	<el-col :span="11"  class="mart">
 	  		<h5>总用户</h5>
-	  		<span>0</span>
+	  		<span>{{bindNumber}}</span>
 	  	</el-col>
 	</el-row>
 	<el-row class="marb">
 	  	<el-col :span="11" :offset="1" class="mart">
 	  		<h5>总充值</h5>
-	  		<span>0</span>
+	  		<span>{{charge}}</span>
 	  	</el-col>
 	  	<el-col :span="11"  class="mart">
 	  		<h5>净利润</h5>
-	  		<span>0</span>
+	  		<span>{{reward}}</span>
 	  	</el-col>
 	</el-row>
-<!--   <el-col :span="10" :offset="1" class="mart">
+  <el-col :span="22" :offset="1"><hr class="hrs"></el-col>
+  <el-row>
+  <el-col :span="10" :offset="1" class="mart">
         <el-date-picker type="date" placeholder="选择日期" v-model="date1" style="width: 100%;"></el-date-picker>
     </el-col>
      <el-col :span="2" class="mart">-</el-col>
     <el-col :span="10" class="mart tablet">
         <el-date-picker type="date" placeholder="选择日期" v-model="date2" style="width: 100%;"></el-date-picker>
     </el-col>
-    <el-col :span="22" :offset="1" class="search"><el-button @click="searchinfo" type="primary">查询</el-button></el-col>
-    <el-col :span="11" :offset="1" class="mart">
-      <h5>今日充值</h5>
-      <span>0</span>
-    </el-col>
-    <el-col :span="11"  class="mart">
-      <h5>今日净利润</h5>
-      <span>0</span>
-    </el-col>
-    <el-col :span="11" :offset="1" class="mart">
-      <h5>今新增代理</h5>
-      <span>0</span>
-    </el-col>
-    <el-col :span="11"  class="mart">
-      <h5>今新增用户</h5>
-      <span>0</span>
-    </el-col> -->
-<div class="tablesc" style="display:block">
-	<el-table
-	:key="tabheight"
-    :data="tableData"
-    border
-    stripe
-    :height="tabH"
-    style="width: 100%">
-    <el-table-column
-      prop="date"
-      label="昵称">
-    </el-table-column>
-    <el-table-column
-      prop="name"
-      width="110"
-      label="绑定玩家数">
-    </el-table-column>
-    <el-table-column
-      prop="address"
-      label="总金额">
-    </el-table-column>
-    <el-table-column
-      prop="address"
-      width="95"
-      label="上级代理">
-    </el-table-column>
-  </el-table>
-</div>
-<!--   <div class="block">
-   <el-pagination
-     class="pagetab"
-     small
-    @size-change="handleSizeChange"
-    @current-change="handleCurrentChange"
-    :current-page.sync="currentPage3"
-    :page-size="100"
-    layout="prev,next, jumper"
-    :total="1000">
-  </el-pagination>
-</div> -->
+  </el-row>
+  <el-row>
+      <el-col :span="11" :offset="1" class="mart">
+        <h5>今日充值</h5>
+        <span>0</span>
+      </el-col>
+      <el-col :span="11"  class="mart">
+        <h5>今日净利润</h5>
+        <span>0</span>
+      </el-col>
+  </el-row>
+  <el-row class="marb">
+      <el-col :span="11" :offset="1" class="mart">
+        <h5>今新增代理</h5>
+        <span>0</span>
+      </el-col>
+      <el-col :span="11"  class="mart">
+        <h5>今新增用户</h5>
+        <span>0</span>
+      </el-col>
+  </el-row>
+  <el-col :span="22" :offset="1"><hr class="hrs"></el-col>
+   <el-col :span="22" :offset="1" class="search"><el-button @click="searchinfo" type="primary">明细查询</el-button></el-col>
  </div>
+</transition>
 </template>
 
 <script>
+import axios from 'axios';
+import qs from 'qs';
 export default {
   name: 'parsearch',
   data () {
@@ -95,66 +67,23 @@ export default {
       msg: 'p',
       date1:null,
       date2:null,
-      tableData: [{
-          date: '2016',
-          name: '王小虎',
-          address: '1518'
-        }, {
-          date: '2016',
-          name: '王小虎',
-          address: '1517'
-        }, {
-          date: '2016',
-          name: '王小虎',
-          address: '1519'
-        }, {
-          date: '2016',
-          name: '王小虎',
-          address: '1516'
-        }, {
-          date: '2016',
-          name: '王小虎',
-          address: '1516'
-        }, {
-          date: '2016',
-          name: '王小虎',
-          address: '1516'
-        }, {
-          date: '2016',
-          name: '王小虎',
-          address: '1516'
-        }, {
-          date: '2016',
-          name: '王小虎',
-          address: '1516'
-        }, {
-          date: '2016',
-          name: '王小虎',
-          address: '1516'
-        }, {
-          date: '2016',
-          name: '王小虎',
-          address: '1516'
-        }, {
-          date: '2016',
-          name: '王小虎',
-          address: '1516'
-        }, {
-          date: '2016',
-          name: '王小虎',
-          address: '1516'
-        }],
+      tableData: [],
         currentPage3: 1,
         btns:[1,2,3,4,5,6,7,8,9],
         lastp:null,
         nowp:null,
         wpage:null,
-        tabH:null
+        tabH:null,
+        promoterNumber:null,
+        bindNumber:null,
+        charge:null,
+        reward:null
     }
   },
   methods:{
   	searchinfo:function () {
-  		console.log(22);
+  		var self =this ;
+      self.$router.push({path:'/perdetail'})
   	},
   	handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
@@ -172,6 +101,28 @@ export default {
   mounted(){
   	var self =this;
   	self.lastp=self.btns.length;
+    var params={page:'1',cid:'2',channel:"fuyang",sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'}
+    axios.post('http://pay.queyoujia.com/user/team/infoPartner',qs.stringify(params),{headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                      }}).then(function (res) {
+     console.log(res);
+     self.reward=res.data.data.reward;
+     self.charge=res.data.data.charge;
+     self.bindNumber=res.data.data.bindNumber;
+     self.promoterNumber=res.data.data.promoterNumber;
+     if (!self.reward) {
+      self.reward=0;
+     }if (!self.charge) {
+       self.charge=0;
+     }
+     if (!self.bindNumber) {
+      self.bindNumber=0;
+     }if (!self.promoterNumber) {
+       self.promoterNumber=0;
+     }
+    }).catch(function (err) {
+     console.log(err);
+    })
 
   },
   computed:{
@@ -189,8 +140,7 @@ export default {
   				self.tabH=(window.screen.availHeight-500+((560/window.screen.availHeight)*30));		
   				console.log(device_type);
   			}
-  		}
-  		
+  		}	
   	}
   }
 }
@@ -198,8 +148,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.mart{text-align: center;margin-top: 2vh;}
+.mart{text-align: center;margin-top: 3vh;}
 .mart span{color: #58B7FF;}
+.mart h5{color: #485769;}
 .search button{width: 100%;margin-top: 2vh;}
 .block{margin-top:1vh;}
 .block ul li button{display: inline-block;float: left;margin-left: 1vw;}
@@ -211,4 +162,12 @@ export default {
 .pagetab{position: absolute;bottom:10vh;}
 .tablesc{width: 100%;}
 .marb{margin-bottom: 5px;}
+.borr{border-right: 1px solid #ddd;}
+.hrs{border:0;border-bottom:1px solid #ddd;}
+.fade-enter-active, .fade-leave-active {
+          transition: opacity .5s
+        }
+        .fade-enter, .fade-leave-active {
+          opacity: 0
+        }
 </style>

@@ -30,7 +30,7 @@ export default {
       var cid = null;
       var channel = null;
       console.log(location.search);
-      if (location.search.indexOf('cid=1')!=-1&&location.search.indexOf('channel=hz')!=-1) {
+     /* if (location.search.indexOf('cid=1')!=-1&&location.search.indexOf('channel=hz')!=-1) {
         console.log(2);
         cid='1';
         channel='hz'
@@ -47,7 +47,7 @@ export default {
       }else{
          console.log(1);
         return;
-      }
+      }*/
   	 
     
   	}
