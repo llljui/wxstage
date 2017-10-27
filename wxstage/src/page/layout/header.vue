@@ -1,6 +1,6 @@
 <template>
   <div class="myheader" :key="headerkey" :style="{paddingRight:pdr}">
-   <header><i class="el-icon-fa el-icon-fa-home el-icon-fa-5x homeleft" @click="gohome"></i>{{nowheader}}<span class="rts" v-text="rightt"></span></header>
+   <header><i class="el-icon-fa el-icon-fa-home el-icon-fa-5x homeleft" @click="gohome"></i>{{nowheader}}<span class="rts" v-text="rightt" v-show="shows"></span></header>
   </div>
 </template>
 <script>
@@ -10,7 +10,8 @@ export default {
     return {
       nowheader:null,
       rightt:'',
-      pdr:null
+      pdr:null,
+      shows:false
     
     }},
     computed:{
@@ -20,13 +21,17 @@ export default {
         self.nowheader=self.$route.name;
         if (self.$route.name=='提现结算'||self.$route.name=='我的会员'||self.$route.name=='我的会员') {
             self.rightt='钻石剩余:35';
-             self.pdr='10vw';
+            self.pdr='10vw';
+            self.shows=true;
         }else if(self.$route.name=='我的推广员'){
-             self.rightt='推广员列表:40人';
+             //Event.$on('pro_send',(data)=>{sessionStorage.pormember=data});
+             //self.rightt='推广员列表:'+sessionStorage.pormember+'人';
+             self.shows=false;
              self.pdr='10vw';
         }else{
           self.rightt=null;
             self.pdr='10vw';
+              self.shows=false;
         }
       }
     

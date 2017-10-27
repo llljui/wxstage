@@ -111,7 +111,7 @@ export default {
           axios.post('http://pay.queyoujia.com/user/team/info',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
-                        //console.log(res.data.data);
+                        console.log(res.data.data);
                         self.tableData=[];
                         self.yqcode="邀请码："+res.data.data.no;
                         self.tableData=res.data.data.list;
@@ -140,7 +140,7 @@ export default {
 },
 mounted:function () {
   var self =this;
-  var params={startTime:'2017-10-22T02:59:13.738Z',endTime:'2017-10-23T02:59:13.738Z',cid:'2',channel:'fuyang',sid:'0b2a8fd90acf4cfc1dad7b1a9e831a79'};
+  var params={startTime:self.date1,endTime:self.date2,cid:'2',channel:'fuyang',sid:'0b2a8fd90acf4cfc1dad7b1a9e831a79'};
   axios.post('http://pay.queyoujia.com/user/team/info',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {

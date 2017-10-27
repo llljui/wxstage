@@ -1,4 +1,5 @@
 <template>
+<transition name="fade" mode="in-out">
   <div class="commission">
   	<el-col :span="11" :offset="1">
 		<div class="brb">
@@ -51,22 +52,25 @@
 	      label="状态">
 	    </el-table-column>
   	</el-table>
-  	 <div class="block">
-	 	<el-pagination
-	 	  class="pagetab"
-	 	  small
-	      @size-change="handleSizeChange"
-	      @current-change="handleCurrentChange"
-	      :current-page.sync="currentPage3"
-	      :page-size="100"
-	      layout="prev,next, jumper"
-	      :total="1000">
-	    </el-pagination>
-	  </div>
+  	 <!-- <div class="block">
+  	 	 	<el-pagination
+  	 	 	  class="pagetab"
+  	 	 	  small
+  	 	      @size-change="handleSizeChange"
+  	 	      @current-change="handleCurrentChange"
+  	 	      :current-page.sync="currentPage3"
+  	 	      :page-size="100"
+  	 	      layout="prev,next, jumper"
+  	 	      :total="1000">
+  	 	    </el-pagination>
+  	 	  </div> -->
   </div>
+</transition>
 </template>
 
 <script>
+import axios from 'axios';
+import qs from 'qs';
 export default {
   name: 'commission',
   data () {
@@ -76,89 +80,31 @@ export default {
       date1:null,
       date2:null,
       currentPage3: 5,
-	  tableData: [{
-	      date: '2016',
-	      name: '王小虎',
-	      address: '1000',
-	      status:'审核中'
-	    }, {
-	      date: '2016-05-04',
-	      name: '王小虎',
-	      address: '10',
-	      status:'已到账'
-	    }, {
-	      date: '2016-05-01',
-	      name: '王小虎',
-	      address: '12121',
-	      status:'返现'
-	    }, {
-	      date: '2016-05-03',
-	      name: '王小虎',
-	      address: '66565',
-	      status:'返现'
-	    },
-	     {
-	      date: '2016-05-04',
-	      name: '王小虎',
-	      address: '10',
-	      status:'已到账'
-	    },
-	     {
-	      date: '2016-05-04',
-	      name: '王小虎',
-	      address: '10',
-	      status:'已到账'
-	    },
-	     {
-	      date: '2016-05-04',
-	      name: '王小虎',
-	      address: '10',
-	      status:'已到账'
-	    },
-	     {
-	      date: '2016-05-04',
-	      name: '王小虎',
-	      address: '10',
-	      status:'已到账'
-	    },
-	     {
-	      date: '2016-05-04',
-	      name: '王小虎',
-	      address: '10',
-	      status:'已到账'
-	    },
-	     {
-	      date: '2016-05-04',
-	      name: '王小虎',
-	      address: '10',
-	      status:'已到账'
-	    },
-	     {
-	      date: '2016-05-04',
-	      name: '王小虎',
-	      address: '10',
-	      status:'已到账'
-	    },
-	     {
-	      date: '2016-05-04',
-	      name: '王小虎',
-	      address: '10',
-	      status:'已到账'
-	    }],
-	    tabH:null
+	  tableData: [],
+	  tabH:null,
+
 
     }
   },
   methods:{
   	searchinfo:function () {
   		console.log(222);
-  	},
-  	handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-      }
+  		var self =this ;
+	    var params={cid:'2',channel:"fuyang",sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245',startTime:self.date1,endTime:self.date2}
+	    axios.post('  		http://pay.queyoujia.com/user/startlight/history',qs.stringify(params),{headers: {
+	                            'Content-Type': 'application/x-www-form-urlencoded'
+	                      }}).then(function (res) {
+	                        console.log(res);
+	                      }).catch(function (err) {
+	                        console.log(err);
+	                      })
+	  	},
+	  	handleSizeChange(val) {
+	        console.log(`每页 ${val} 条`);
+	      },
+	      handleCurrentChange(val) {
+	        console.log(`当前页: ${val}`);
+	      }
   },
   computed:{
   	tabheight(){
@@ -179,6 +125,17 @@ export default {
   		}
   		
   	}
+  },
+  mounted(){
+  	var self =this ;
+    var params={cid:'2',channel:"fuyang",sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'}
+    axios.post('http://pay.queyoujia.com/user/startlight/now',qs.stringify(params),{headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                      }}).then(function (res) {
+                        console.log(res);
+                      }).catch(function (err) {
+                        console.log(err);
+                      })
   }
 }
 </script>
@@ -199,4 +156,10 @@ export default {
 .pagetab{position: absolute;bottom:10vh;}
 /* .el-pagination{margin-left: -2.8vw;} */
 .tablesc{width: 100%;}
+.fade-enter-active, .fade-leave-active {
+          transition: opacity .8s
+        }
+        .fade-enter, .fade-leave-active {
+          opacity: 0
+        }
 </style>

@@ -1,8 +1,8 @@
 <template>
   <div class="perrechanger">
   	<el-row class="mrt">
-  		<el-col :span="12" :offset="1">推广员编号:2061160</el-col>
-  		<el-col :span="10" :offset="1">邀请码:011784</el-col>
+  		<el-col :span="12" :offset="1">推广员编号:{{tgcode}}</el-col>
+  		<el-col :span="10" :offset="1">邀请码:{{yqcode}}</el-col>
   	</el-row>
     <el-col :span="10" :offset="1" class="mrt">
 	  	<div class="block">
@@ -27,32 +27,29 @@
 	    </el-date-picker>	
 	  </div>
 	</el-col>
-	<el-col :span="22" :offset="1" class="search mrt"><el-button type="primary">查询</el-button></el-col>
+	<el-col :span="22" :offset="1" class="search mrt"><el-button type="primary" @click="submit">查询</el-button></el-col>
 	<el-table
 	:key="tableH"
     :data="tableData"
-    height="350"
+    height="300"
     border>
     <el-table-column
       prop="date"
       align="center"
-      label="日期">
+      label="充值金额">
     </el-table-column>
     <el-table-column
       prop="name"
       align="center"
-      label="姓名">
-    </el-table-column>
-    <el-table-column
-      prop="address"
-      align="center"
-      label="地址">
+      label="充值时间">
     </el-table-column>
   </el-table>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+import qs from "qs";
 export default {
   name: 'perrechanger',
   data () {
@@ -86,42 +83,10 @@ export default {
         },
         value1: '',
         value2: '',
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        },
-        {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        },
-        {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }],
-        tH:null
+        tableData: [],
+        tH:null,
+        tgcode:null,
+        yqcode:null
       }
     },
     computed:{
@@ -130,6 +95,40 @@ export default {
     		self.th=window.screen.availHeight/2+"px";
     		console.log(window.screen.availHeight);
     	}
+    },
+    mounted(){
+      var self =this ;
+        //console.log(self.date1);
+            var params={startTime:self.date1,endTime:self.date2,cid:'2',channel:'fuyang',sid:'0b2a8fd90acf4cfc1dad7b1a9e831a79'}
+          axios.post('http://pay.queyoujia.com/user/charge/person',qs.stringify(params),{headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                      }}).then(function (res) {
+                        console.log(res.data.data);
+                        self.tableData=[];
+                        self.yqcode=res.data.data.no;
+                        self.tgcode=res.data.data.uid;
+                        self.tableData=res.data.data.list;
+                      }).catch(function (err) {
+                        console.log(err);
+                      })    
+    },
+    methods:{
+      submit:function () {
+        var self =this ;
+        //console.log(self.date1);
+            var params={startTime:self.date1,endTime:self.date2,cid:'2',channel:'fuyang',sid:'0b2a8fd90acf4cfc1dad7b1a9e831a79'}
+          axios.post('  http://pay.queyoujia.com/user/charge/person',qs.stringify(params),{headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                      }}).then(function (res) {
+                        console.log(res.data.data);
+                        self.tableData=[];
+                       // self.yqcode=res.data.data.no;
+                        //self.tgcode=res.data.data.uid;
+                        self.tableData=res.data.data.list;
+                      }).catch(function (err) {
+                        console.log(err);
+                      })  
+      }
     }
 }
 </script>

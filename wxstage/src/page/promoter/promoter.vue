@@ -1,8 +1,8 @@
 <template>
   <transition name="fade" mode="in-out">
   <div class="promoter">
-  	<el-col :span="14" :offset="1" class="mrt"><el-input placeholder="请输入推广员ID"></el-input></el-col>
-  	<el-col :span="7" :offset="1" class="searchbtn"><el-button type="primary" style="width:100%">查询</el-button></el-col>
+  	<el-col :span="14" :offset="1" class="mrt"><el-input placeholder="请输入推广员ID" v-model="prouid"></el-input></el-col>
+  	<el-col :span="7" :offset="1" class="searchbtn"><el-button type="primary" style="width:100%" @click="searchinfo">查询</el-button></el-col>
   	<el-table
     :key="tabheight"
     	 align="center"
@@ -11,20 +11,20 @@
       :height="tabH"
     border>
     <el-table-column
-      prop="name"
+      prop="uid"
       width="120"
       align="center"
       label="推广员ID">
     </el-table-column>
     <el-table-column
-      prop="name"
+      prop="nickname"
       align="center"
       width="100"
       sortable
       label="昵称">
     </el-table-column>
     <el-table-column
-      prop="address"
+      prop="dateline"
       align="center"
       sortable
       width="120"
@@ -42,79 +42,36 @@
       </template>
     </el-table-column>
   </el-table>
-      <el-pagination
-        class="pagetab"
-        small
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page.sync="currentPage3"
-      :page-size="100"
-      layout="prev, next, jumper"
-      :total="1000">
-    </el-pagination>
+     <!--  <el-pagination
+       class="pagetab"
+       small
+     @size-change="handleSizeChange"
+     @current-change="handleCurrentChange"
+     :current-page.sync="currentPage3"
+     :page-size="100"
+     layout="prev, next, jumper"
+     :total="1000">
+         </el-pagination> -->
+         <div class="rts">推广员列表:{{pormember}}</div>
   </div>
 </transition>
 </template>
 
 <script>
+import axios from 'axios';
+import qs from 'qs';
 export default {
   name: 'promoter',
   data () {
     return {
-      tableData3: [{
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '100000'
-        }, {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '100000'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-           address: '100000'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-           address: '100000'
-        }, {
-          date: '2016-05-08',
-          name: '王小虎',
-           address: '100000'
-        }, {
-          date: '2016-05-06',
-          name: '王小虎',
-          address: '100000'
-        }, {
-          date: '2016-05-07',
-          name: '王小虎',
-          address: '100000'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-           address: '100000'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-           address: '100000'
-        }, {
-          date: '2016-05-08',
-          name: '王小虎',
-           address: '100000'
-        }, {
-          date: '2016-05-06',
-          name: '王小虎',
-          address: '100000'
-        }, {
-          date: '2016-05-07',
-          name: '王小虎',
-          address: '100000'
-        }],
+      tableData3: [],
         currentPage1: 5,
         currentPage2: 5,
         currentPage3: 5,
         currentPage4: 4,
-        tabH:null
+        tabH:null,
+        prouid:null,
+        pormember:null
     }
     },
     methods:{
@@ -132,6 +89,19 @@ export default {
       },
       handleDelete(index, row) {
         console.log(index, row);
+      },
+      searchinfo:function () {
+        var self =this ;
+        var params={uid:self.prouid,cid:'2',channel:'fuyang',sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'}
+        axios.post('http://pay.queyoujia.com/user/promoter/agent',qs.stringify(params),{headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                      }}).then(function (res) {
+                        console.log(res.data.data.list);
+                        self.tableData3=[];
+                        self.tableData3=res.data.data.list;
+                      }).catch(function (err) {
+                        console.log(err);
+                      })
       }
     },
     computed:{
@@ -153,6 +123,22 @@ export default {
       }
       
     }
+  },
+  mounted(){
+    var self =this ;
+    var params={cid:'2',channel:'fuyang',sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'};
+    axios.post('http://pay.queyoujia.com/user/promoter/agent',qs.stringify(params),{headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                      }}).then(function (res) {
+                        console.log(res.data.data.number);
+                        self.tableData3=[];
+                        self.tableData3=res.data.data.list;
+                        self.pormember=res.data.data.number;
+                        //Event.$emit('pros_end',res.data.data.number)
+                        //sessionStorage.pormember=res.data.data.number;
+                      }).catch(function (err) {
+                        console.log(err);
+                      })
   }
 }
 </script>
@@ -172,4 +158,5 @@ export default {
         .fade-enter, .fade-leave-active {
           opacity: 0
         }
+.rts{text-align: right;font-size: 0.7rem;position: absolute;top: 2vh;right: 5vw;padding-top: 2%;color: white;line-height: 4vh;}
 </style>

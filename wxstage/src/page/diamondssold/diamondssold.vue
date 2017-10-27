@@ -1,10 +1,12 @@
 <template>
+  <transition name="fade" mode="in-out">
   <div class="diamondssold">
   	<el-col :span="22" :offset="1" class="soldcount">可售钻石：{{cansold}}</el-col>
   	<el-col :span="22" :offset="1" class="soldcount"><el-input placeholder="请输入游戏ID" v-model="uids"><template slot="append"><el-button @click="getid" v-html="seccode"></el-button></template></el-input></el-col>
   	<el-col :span="22" :offset="1" class="soldcount"><el-input placeholder="请输入钻石数量" type="number" v-model="count"></el-input></el-col>
   	<el-col :span="22" :offset="1" class="soldcount"><el-button type="primary" class="btnsure" @click="besure">确认</el-button></el-col>
   </div>
+</transition>
 </template>
 
 <script>
@@ -71,4 +73,10 @@ export default {
 <style scoped>
 .soldcount{margin-top: 2vh;font-size: 1rem;font-family: '微软雅黑';font-weight: normal;color: #1f2d3d;}
 .btnsure{width: 100%;font-size: 1rem;margin-top: 2vh;}
+.fade-enter-active, .fade-leave-active {
+          transition: opacity .8s
+        }
+        .fade-enter, .fade-leave-active {
+          opacity: 0
+        }
 </style>

@@ -124,12 +124,16 @@ export default {
 	font-weight: lighter;
 	margin-top: 2vh;
 	color: #324057;
+  display: inline-block;
+  height: 2vh;
 }
 .lost{font-family: '微软雅黑';
 	font-size: 1rem;
 	font-weight: lighter;
 	margin-top: 2vh;
-	color: #324057;}
+	color: #324057;
+ display: inline-block;
+  height: 2vh;}
 .bor1{border:1px solid #ddd;border-right: 0;height: 6vh;margin-top: 4vh;text-align: center;line-height: 6vh;}
 .bor2{border:1px solid #ddd;height: 6vh;margin-top: 4vh;text-align: center;line-height: 6vh;}
 .textc{font-size: 1rem;font-weight: lighter;font-family: '微软雅黑';margin-top:2vh; margin-bottom: 2vh;}

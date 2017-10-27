@@ -1,18 +1,139 @@
 <template>
   <div class="secdetail">
+  	<el-col :span="10" :offset="1" class="mart">
+        <el-date-picker type="date" placeholder="选择日期" v-model="date1" style="width: 100%;"></el-date-picker>
+    </el-col>
+     <el-col :span="2"  class="mart">-</el-col>
+    <el-col :span="10" class="mart tablet">
+        <el-date-picker type="date" placeholder="选择日期" v-model="date2" style="width: 100%;"></el-date-picker>
+    </el-col>
+      <el-col :span='22' :offset="1" class="mart">
+    	<el-input placeholder="请输入游戏ID" v-model="idinfo"></el-input>
+    </el-col>
+     <el-col :span='22' :offset="1" class="mart serbtn">
+   		<el-button @click="searchinfo" class="btnser" type="primary">查询</el-button>
+	</el-col>
+	<el-col :span="7" :offset="1" class="colt">
+		<h5>二级推广员</h5>
+		<b>{{number}}</b>
+	</el-col>
+	<el-col :span="7" :offset="1" class="colt">
+		<h5>消耗总额</h5>
+		<b>{{consumeall}}</b>
+	</el-col>
+	<el-col :span="7" class="colt">
+		<h5>充值总额</h5>
+		<b>{{chargeall}}</b>
+	</el-col>
+	<el-table
+		    :data="tableData3"
+		    height="250"
+		    border
+		    style="width: 100%">
+		    <el-table-column
+		      prop="pid"
+		      min-width="120"
+		      align="center"
+		      label="推广员">
+		    </el-table-column>
+		    <el-table-column
+		      prop="number"
+		      align="center"
+		      min-width="120"
+		      label="会员">
+		    </el-table-column>
+		    <el-table-column
+		      prop="consume"
+		      align="center"
+		      min-width="120"
+		      label="团队消耗">
+		    </el-table-column>
+		    <el-table-column
+		      prop="charge"
+		      align="center"
+		      min-width="120"
+		      label="充值总额">
+		    </el-table-column>
+		 </el-table>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+import qs from 'qs';
 export default {
   name: 'secdetail',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      date1:null,
+      date2:null,
+      tableData3:[],
+      number:null,
+      consumeall:null,
+      chargeall:null,
+      idinfo:null
     }
+  },
+  methods:{
+  	searchinfo:function () {
+  		console.log(22);
+  		var self = this;
+  		 if (self.date1&&self.date2) {
+  		 	if (self.date2>=self.date1) {
+	  	var params={startTime:self.date1,endTime:self.date2,cid:'2',channel:'fuyang',sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245',uid:self.idinfo}
+	  	axios.post('http://pay.queyoujia.com/user/team/promoter',qs.stringify(params),{headers: {
+	                            'Content-Type': 'application/x-www-form-urlencoded'
+	                      }}).then(function (res) {
+	                        console.log(res.data.data);
+	                        self.tableData3=[];
+	                        //self.number=res.data.data.number;
+	                       // self.chargeall=res.data.data.charge;
+	                      //  self.consumeall=res.data.data.consume;
+	                        self.tableData3=res.data.data.list;
+	                      }).catch(function (err) {
+	                        console.log(err);
+	                      });}
+	                        else{
+		                     self.$message({
+		                      title: '警告',
+		                      message: '结束时间不能不开始时间早',
+		                      type: 'warning'
+		                    });
+                		  }    
+	                  }else{
+          self.$message({
+          title: '警告',
+          message: '请核实输入时间',
+          type: 'warning'
+        });
+        }
+  	}
+  },
+  mounted(){
+  	var self = this;
+  	var params={startTime:self.date1,endTime:self.date2,cid:'2',channel:'fuyang',sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'}
+  	axios.post('http://pay.queyoujia.com/user/team/promoter',qs.stringify(params),{headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                      }}).then(function (res) {
+                        console.log(res.data.data);
+                        self.tableData3=[];
+                        self.number=res.data.data.number;
+                        self.chargeall=res.data.data.charge;
+                        self.consumeall=res.data.data.consume;
+                        self.tableData3=res.data.data.list;
+                      }).catch(function (err) {
+                        console.log(err);
+                      });
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.mart{margin-top: 2vh;text-align: center;}
+.serbtn button{width: 100%;}
+.serbtn{margin-bottom: 2vh;}
+.colt{text-align: center;margin-bottom: 1vh;}
+.colt>h5{color: #324057;}
+.colt>b{color: #20A0FF;font-size: 1rem;font-weight: lighter;margin-top: 1vh;display: block;}
+</style>

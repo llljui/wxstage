@@ -146,12 +146,12 @@ export default new Router({
       children: [{ path: 'memberdetail', name:'会员明细', component: _import('memberdetail/memberdetail') }]
     },
     {
-      path:'/memberdetail',
+      path:'/secdetail',
       component:layout,
-      redirect: 'memberdetail/memberdetail',
+      redirect: 'secdetail/secdetail',
       hidden: true,
       noDropdown: true,
-      children: [{ path: 'memberdetail', name:'会员明细', component: _import('memberdetail/memberdetail') }]
+      children: [{ path: 'secdetail', name:'二级推广员', component: _import('secdetail/secdetail') }]
     },
     {
       path:'/promoterdetail',
@@ -159,7 +159,7 @@ export default new Router({
       redirect: 'promoterdetail/promoterdetail',
       hidden: true,
       noDropdown: true,
-      children: [{ path: 'promoterdetail', name:'会员明细', component: _import('promoterdetail/promoterdetail') }]
+      children: [{ path: 'promoterdetail', name:'推广员明细', component: _import('promoterdetail/promoterdetail') }]
     }  
   ]
 })
