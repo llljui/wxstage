@@ -1,6 +1,6 @@
 <template>
   <transition name="fade" mode="in-out">
-  <div class="teamdetail" v-loading="loading"> 
+  <div class="teamdetail" v-loading="loading" :key="tbkey"> 
   	<el-col :span="10" :offset="1" class="mart">
         <el-date-picker type="date" placeholder="选择日期" v-model="date1" style="width: 100%;"></el-date-picker>
     </el-col>
@@ -114,7 +114,7 @@ export default {
         rewardmount:null,
         uids:null,
         loading:false,
-        TDheight:'250'
+        TDheight:null
     }
   },
   methods:{
@@ -268,6 +268,18 @@ export default {
     self.isShow2=true;
     self.tabbg1=true;
     self.tabbg2=false;
+    console.log(document.body.clientHeight);
+      console.log(document);
+      self.TDheight=(document.body.clientHeight/2).toString();
+      console.log(self.TDheight);
+  },
+  computed:{
+    tbkey(){
+     
+    }
+  },
+  destroyed(){
+    location.reload();
   }
 }
 </script>
