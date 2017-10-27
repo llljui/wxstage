@@ -1,5 +1,5 @@
 <template>
-  <div class="perrechanger">
+  <div class="perrechanger" :key="table_r">
   	<el-row class="mrt">
   		<el-col :span="12" :offset="1">推广员编号:{{tgcode}}</el-col>
   		<el-col :span="10" :offset="1">邀请码:{{yqcode}}</el-col>

@@ -21,7 +21,7 @@
 		<el-col :span="11" class="returndetail">返利总额<br><span class="textb">{{rewardmount}}</span></el-col>
 		 <el-table
 		    :data="tableData3"
-		    height="230"
+		    :height="TDheight"
 		    border
 		    style="width: 100%">
 		    <el-table-column
@@ -54,7 +54,7 @@
 	<el-col :span="22" :offset='1' class="mart brb">钻石消耗总额：<span class="textb">{{consumeall}}张</span></el-col>
 	<el-table
 		    :data="tableData2"
-		    height="240"
+		    :height="TDheight"
 		    border
 		    style="width: 100%;">
 		    <el-table-column
@@ -113,7 +113,8 @@ export default {
         chargemount:null,
         rewardmount:null,
         uids:null,
-        loading:false
+        loading:false,
+        TDheight:'250'
     }
   },
   methods:{

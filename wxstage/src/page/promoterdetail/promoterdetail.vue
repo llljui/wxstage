@@ -135,6 +135,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .mumbername,.lost{
+  display: block;
+  height: 2vh;
   font-family: '微软雅黑';
   font-size: 1rem;
   font-weight: lighter;
@@ -143,6 +145,8 @@ export default {
 }
 .lost{font-family: '微软雅黑';
   font-size: 1rem;
+  display: block;
+  height: 2vh;
   font-weight: lighter;
   margin-top: 2vh;
   color: #324057;}
