@@ -1,6 +1,6 @@
 <template>
-  <div class="perrechanger" >
-  	<el-row class="mrt">
+  <div class="perrechanger"  v-loading="loading">
+  	<el-row class="mrt"  >
   		<el-col :span="12" :offset="1">推广员编号:{{tgcode}}</el-col>
   		<el-col :span="10" :offset="1">邀请码:{{yqcode}}</el-col>
   	</el-row>
@@ -11,7 +11,7 @@
 	      type="date"
 	      placeholder="选择日期"
 	      style="width: 100%;"
-	      :picker-options="pickerOptions0">
+	      >
 	    </el-date-picker>
 	  </div>
 	</el-col>
@@ -23,15 +23,15 @@
 	      type="date"
 	      style="width: 100%;"
 	      placeholder="选择日期"
-	      :picker-options="pickerOptions1">
+	     >
 	    </el-date-picker>	
 	  </div>
 	</el-col>
 	<el-col :span="22" :offset="1" class="search mrt"><el-button type="primary" @click="submit">查询</el-button></el-col>
 	<el-table
-	:key="tableH"
+	  :key="tableHH"
     :data="tableData"
-    height="300"
+    :height="tableH"
     border>
     <el-table-column
       prop="date"
@@ -44,6 +44,7 @@
       label="充值时间">
     </el-table-column>
   </el-table>
+  <div class="more" @click="lookmore">{{moreOrelse}}</div>
   </div>
 </template>
 
@@ -86,11 +87,16 @@ export default {
         tableData: [],
         tH:null,
         tgcode:null,
-        yqcode:null
+        yqcode:null,
+        tableH:null,
+        moreOrelse:null,
+        loading:false,
+        pagesize:1,
+        pagechose:null
       }
     },
     computed:{
-    	tableH(){
+    	tableHH(){
     		var self =this;
     		self.th=window.screen.availHeight/2+"px";
     		console.log(window.screen.availHeight);
@@ -99,7 +105,7 @@ export default {
     mounted(){
       var self =this ;
         //console.log(self.date1);
-            var params={startTime:self.date1,endTime:self.date2,cid:'2',channel:'fuyang',sid:'0b2a8fd90acf4cfc1dad7b1a9e831a79'}
+            var params={startTime:self.date1,endTime:self.date2,cid:sessionStorage.cid,channel:sessionStorage.channel}
           axios.post('http://pay.queyoujia.com/user/charge/person',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
@@ -108,15 +114,21 @@ export default {
                         self.yqcode=res.data.data.no;
                         self.tgcode=res.data.data.uid;
                         self.tableData=res.data.data.list;
+                          if (self.pagesize<res.data.data.total) {
+                                  self.moreOrelse='查看更多'
+                                }else{
+                                  self.moreOrelse='无更多数据'
+                                }  
+
                       }).catch(function (err) {
                         console.log(err);
-                      })    
+                      })  
+      self.tableH=window.screen.availHeight/2.5;
     },
     methods:{
       submit:function () {
         var self =this ;
-        //console.log(self.date1);
-            var params={startTime:self.date1,endTime:self.date2,cid:'2',channel:'fuyang',sid:'0b2a8fd90acf4cfc1dad7b1a9e831a79'}
+        var params={startTime:self.value1,endTime:self.value2,cid:sessionStorage.cid,channel:sessionStorage.channel,page:self.pagechose}
           axios.post('  http://pay.queyoujia.com/user/charge/person',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
@@ -125,9 +137,27 @@ export default {
                        // self.yqcode=res.data.data.no;
                         //self.tgcode=res.data.data.uid;
                         self.tableData=res.data.data.list;
+                        if (self.pagesize<res.data.data.total) {
+                                  self.moreOrelse='查看更多'
+                                }else{
+                                  self.moreOrelse='无更多数据'
+                                } 
                       }).catch(function (err) {
                         console.log(err);
                       })  
+      },
+      lookmore:function () {
+        var self =this;
+        console.log(22);
+       if (self.moreOrelse='无更多数据') {
+        }else{
+          self.loading=true;
+          self.pagechose++;
+          self.submit();
+        }
+        setTimeout(function () {
+          self.loading=false;
+        },1000)
       }
     }
 }
@@ -138,4 +168,6 @@ export default {
 .mrt{margin-top: 2vh; font-size: 0.9rem;color:   #1F2D3D}
 .search{border-color: #20a0ff;padding: 7px 9px;font-size: 1rem;border-radius: 4px;margin-bottom: 2vh;text-align: center;}
 .search button{width: 100%;}
+.more{text-align: center;cursor: pointer;color: #5e7382}
+.more:active{color: #58B7FF;}
 </style>

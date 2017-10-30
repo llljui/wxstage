@@ -51,23 +51,7 @@ export default {
   name: 'diamondsbuy',
   data () {
     return {
-     tableData: [{
-          date: '200颗',
-          name: '200元',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '500颗',
-          name: '500元',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '1000颗',
-          name: '1000元',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2000颗',
-          name: '2000元',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }],
+     tableData: [],
         mydia:'500颗',
         uid:'1010',
         nickname:'1010'

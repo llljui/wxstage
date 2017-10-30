@@ -48,7 +48,7 @@ export default {
             });
             return false; 
         }else{
-          var params={mobile:"18267832592",cid:'2',channel:"fuyang"}
+          var params={mobile:self.input1,cid:sessionStorage.cid,channel:sessionStorage.channel}
           axios.post('http://pay.queyoujia.com/auth/sms').then(function (res) {
             console.log(res);
           }).catch(function (err) {
@@ -72,6 +72,24 @@ export default {
        var self =this ;
       if (self.input1&&self.input2) {
         console.log('ok');
+        var params={uid:sessionStorage.myuid,mobile:self.input1,code:self.input2,cid:sessionStorage.cid,channel:sessionStorage.channel}
+        axios.post('http://pay.queyoujia.com/user/bind/mobile',qs.stringify(params),{headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                      }}).then(function(res){
+                        if (res.data.code==0) {
+                            this.$message({
+                            message: '绑定成功',
+                            type: 'success'
+                          });
+                        }else{
+                           this.$message({
+                            message: '绑定失败',
+                            type: 'warning'
+                          });
+                          }
+                        }).catch(function (err) {
+                        console.log(err);
+                      })
       }else{
         this.$message({
           message: '输入不全，请检查！',

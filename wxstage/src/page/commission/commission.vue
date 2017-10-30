@@ -1,6 +1,6 @@
 <template>
 <transition name="fade" mode="in-out">
-  <div class="commission">
+  <div class="commission"   v-loading="loading">
   	<el-col :span="11" :offset="1">
 		<div class="brb">
 			累计提现
@@ -28,30 +28,34 @@
 	    style="width: 100%">
 	    <el-table-column
 	    align="center"
-	      prop="date"
+	      prop="nickname"
 	      label="昵称">
 	    </el-table-column>
 	    <el-table-column
 	      align="center"
-	      prop="name"
+	      prop="amount"
 	      label="金额">
 	    </el-table-column>
 	    <el-table-column
 	      align="center"
-	      prop="address"
+	      prop="amountBonus"
 	      label="奖金">
 	    </el-table-column>
 	     <el-table-column
 	      align="center"
-	      prop="address"
+	      prop="money"
 	      label="总金额">
 	    </el-table-column>
-	     <el-table-column
-	      align="center"
-	      prop="status"
-	      label="状态">
-	    </el-table-column>
+      <el-table-column label="状态" align="center" prop="status">
+      <template slot-scope="scope"  align="center">
+        <el-button
+         align="center"
+          size="small"
+          @click="handleEdit(scope.$index, scope.row)" :disabled="statusable" :style="{color:btncolor}" :type="btnStatus">{{scope.row.status}}</el-button>
+      </template>
+    </el-table-column>
   	</el-table>
+     <div class="more" @click="lookmore" >{{moreOrelse}}</div>
   	 <!-- <div class="block">
   	 	 	<el-pagination
   	 	 	  class="pagetab"
@@ -80,17 +84,25 @@ export default {
       date1:null,
       date2:null,
       currentPage3: 5,
-	  tableData: [],
-	  tabH:null,
-
-
+	    tableData: [],
+	    tabH:null,
+      moreOrelse:null,
+      loading:false,
+      nowpage:'1',
+      canable:false,
+      yesdate:null,
+      todaydate:null,
+      amountBonus:[],
+      btnStatus:null,
+      btncolor:null,
+      statusable:null
     }
   },
   methods:{
   	searchinfo:function () {
   		console.log(222);
   		var self =this ;
-	    var params={cid:'2',channel:"fuyang",sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245',startTime:self.date1,endTime:self.date2}
+	    var params={cid:sessionStorage.cid,channel:sessionStorage.channel,sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245',startTime:self.date1,endTime:self.date2}
 	    axios.post('  		http://pay.queyoujia.com/user/startlight/history',qs.stringify(params),{headers: {
 	                            'Content-Type': 'application/x-www-form-urlencoded'
 	                      }}).then(function (res) {
@@ -104,7 +116,25 @@ export default {
 	      },
 	      handleCurrentChange(val) {
 	        console.log(`当前页: ${val}`);
-	      }
+	      },
+      lookmore:function () {
+         var self =this;
+        console.log(22);
+        if (self.moreOrelse='无更多数据') {
+          self.loading=false
+        }else{
+          self.loading=true
+        }
+        setTimeout(function () {
+          self.loading=false;
+        },1000)
+      },
+      handleEdit(index, row) {
+        console.log(index, row);
+      },
+      handleDelete(index, row) {
+        console.log(index, row);
+      }
   },
   computed:{
   	tabheight(){
@@ -113,13 +143,13 @@ export default {
   		console.log(window.screen.availHeight);
   		if (device_type.indexOf('Nexus')!=-1) {
   			console.log('Nexus');
-  			self.tabH=(window.screen.availHeight-500+(560/window.screen.availHeight)*90);
+  			self.tabH=(window.screen.availHeight-500+(560/window.screen.availHeight)*70);
   			console.log(self.tabH);
   		}else{
   			if (window.screen.availHeight<570) {
-  				self.tabH='250';
+  				self.tabH='220';
   			}else{
-  				self.tabH=(window.screen.availHeight-500+((560/window.screen.availHeight)*140));		
+  				self.tabH=(window.screen.availHeight-500+((560/window.screen.availHeight)*110));		
   				console.log(device_type);
   			}
   		}
@@ -128,11 +158,26 @@ export default {
   },
   mounted(){
   	var self =this ;
-    var params={cid:'2',channel:"fuyang",sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'}
-    axios.post('http://pay.queyoujia.com/user/startlight/now',qs.stringify(params),{headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                      }}).then(function (res) {
-                        console.log(res);
+      var now = new Date();
+      now.setHours('00', '00', '00', '0');
+      self.yesdate=now.getTime()/1000-86400;
+      self.todaydate=now.getTime()/1000;//获取凌晨时间
+    var params={cid:'1',channel:"hz",sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245',uid:'2061160',startTime:self.yesdate,endTime:self.todaydate}
+    axios.post('http://pay.queyoujia.com/user/startlight/exchangeInfo',qs.stringify(params),{headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(function (res) {
+                         console.log(res);
+                         self.tableData=[];
+                         self.amountBonus=[];
+                         self.tableData=res.data.data.list;
+
+                         res.data.data.list.forEach(function (item,index) {
+                           self.tableData[index].amountBonus=item.amountBonus*item.amount;
+                           self.tableData[index].money=item.amountBonus*item.amount+item.amount;
+                         });                       
+                         if (self.nowpage<res.totalPage) {
+                            self.moreOrelse='查看更多'
+                          }else{
+                            self.moreOrelse='无更多数据'
+                          } 
                       }).catch(function (err) {
                         console.log(err);
                       })
@@ -162,4 +207,6 @@ export default {
         .fade-enter, .fade-leave-active {
           opacity: 0
         }
+.more{text-align: center;cursor: pointer;color: #5e7382}
+.more:active{color: #58B7FF;}
 </style>

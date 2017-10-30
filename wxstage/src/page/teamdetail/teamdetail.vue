@@ -49,6 +49,8 @@
 		      label="充值时间">
 		    </el-table-column>
 		 </el-table>
+     <div class="more" @click="lookmore" v-show="pag1">{{moreOrelse}}</div>
+     <div class="more" @click="lookmore" v-show="pag2">{{pagesize}}</div>
 	</div>
 	<div v-show='isShow2'>
 	<el-col :span="22" :offset='1' class="mart brb">钻石消耗总额：<span class="textb">{{consumeall}}张</span></el-col>
@@ -82,6 +84,8 @@
 		      label="消耗时间">
 		    </el-table-column>
 		 </el-table>
+     <div class="more" @click="lookmore(1)" v-show="pag1">{{moreOrelse}}</div>
+     <div class="more" @click="lookmore(2)" v-show="pag2">{{pagesize}}</div>
 	</div>
   </div>
 </transition>
@@ -114,13 +118,45 @@ export default {
         rewardmount:null,
         uids:null,
         loading:false,
-        TDheight:null
+        TDheight:null,
+        moreOrelse:null,
+        pagesize:null,
+        pg1:1,
+        pg2:1,
+        pag1:true,
+        pag2:false,
+        total1:null,
+        total2:null,
+        pagechose:null
     }
   },
   methods:{
   	 handleClick(tab, event) {
   	 	var self =this;
         console.log(tab, event);
+      },
+      lookmore:function (val) {
+        var self =this;
+        if (val==1) {
+           if (self.moreOrelse='无更多数据') {
+              self.loading=false;
+            }else{
+              self.loading=true;
+              self.pagechose=self.pg1;
+              self.searchinfo();
+            }
+        }else if(val==2){
+          if (self.pagesize='无更多数据') {
+              self.loading=false
+            }else{
+              self.loading=true;
+              self.pagechose=self.pg2++;
+              self.searchinfo();
+            }
+        }else{return}
+        setTimeout(function () {
+          self.loading=false;
+        },1000)
       },
       tabbg(val) {
         self =this;
@@ -132,6 +168,8 @@ export default {
           self.col1="white";
           self.tabg2="white";
           self.col2="#20A0FF";
+          self.pag1=true;
+          self.pag2=false;
       	}else if(val==2){
           console.log(self.isShow2);
           self.isShow1=true;
@@ -140,34 +178,66 @@ export default {
           self.col2="white";
           self.tabg1="white";
           self.col1="#20A0FF";
+          self.pag1=false;
+          self.pag2=true;
       	}else{return;}
       },
       searchinfo:function(){
+
         var self =this ;
         var temp1=self.isShow1;
         var temp2=self.isShow2;
-        self.isShow2=true;
+        /*self.isShow2=true;
         self.isShow1=true;
-        self.loading=true;
+        self.loading=true;*/
         if (self.date1&&self.date2) {
-           if (self.date2>=self.date1) {
-       /* var params={'uid':self.uid,'startTime':self.date1,'endTime':self.date2,'cid':'2','channel':'fuyang',sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'}
-        axios.post('http://pay.queyoujia.com/user/charge/member',qs.stringify(params),{headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                      }}).then(function(res){
-                        console.log(res);
-                        self.tableData3=[];
-                      //self.consumeall=res.data.data.consumeTotal;
-                      self.tableData3=res.data.data.charge;
-                      self.chargemount=res.data.data.chargeTotal;
-                      self.rewardmount=res.data.data.reward;
-                      self.isShow2=temp2;
-                      self.isShow1=temp1;
-                      setTimeout(function(){self.loading=false;},500)
-        }).catch(function (err) {
-          console.log(err);
-        })*/
-         axios.get('http://pay.queyoujia.com/user/charge/member',{params:{'uid':self.uids,'startTime':self.date1,'endTime':self.date2,'cid':'2','channel':'fuyang',sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'}}).then(function (res) {
+           if (self.date2>=self.date1&&((self.date2-self.date1)/86400000)<20) {
+            axios.get('http://pay.queyoujia.com/user/charge/member',{params:{'uid':self.uids,'startTime':self.date1,'endTime':self.date2,'cid':sessionStorage.cid,'channel':sessionStorage.channel,page:self.pagechose}}).then(function (res) {
+                                        console.log(res);
+                                  self.tableData3=[];
+                                //self.consumeall=res.data.data.consumeTotal;
+                                self.tableData3=res.data.data.charge;
+                                self.chargemount=res.data.data.chargeTotal;
+                                self.rewardmount=res.data.data.reward;
+                                self.isShow2=temp2;
+                                self.isShow1=temp1;
+                                 if (self.pg2<res.data.data.total) {
+                                 self.pagesize='查看更多'
+                                  
+                                }else{
+                                  self.pagesize='无更多数据'
+                                }
+                                setTimeout(function(){self.loading=false;},500);
+                    console.log(res);
+                  }).catch(function (error) {
+                    console.log(error);
+                  }); 
+                  axios.get('http://pay.queyoujia.com/user/consume/member',{params:{'uid':self.uids,'startTime':self.date1,'endTime':self.date2,'cid':sessionStorage.cid,'channel':sessionStorage.channel,page:self.pagechose}}).then(function (res) {
+                                      self.tableData2=[];
+                                      self.consumeall=res.data.data.consumeTotal;
+                                      self.tableData2=res.data.data.consume;
+                                      if (self.pg1<res.data.data.total) {
+                                                   self.pagesize='查看更多'
+                                                    
+                                                  }else{
+                                                    self.pagesize='无更多数据'
+                                                  }
+                  }).catch(function (error) {
+                    console.log(error);
+                  });        
+                }
+      else{
+         self.$message({
+          title: '警告',
+          message: '结束时间不能不开始时间早,且时间间隔不大于20天',
+          type: 'warning'
+        });
+         self.loading=false;
+      } 
+      }
+     else{
+      if(!self.uids&&!self.date1||!self.date2){
+        axios.get('http://pay.queyoujia.com/user/charge/member',{params:{'uid':self.uids,'startTime':self.date1,'endTime':self.date2,'cid':sessionStorage.cid,'channel':sessionStorage.channel,page:self.pagechose}}).then(function (res) {
                               console.log(res);
                         self.tableData3=[];
                       //self.consumeall=res.data.data.consumeTotal;
@@ -176,91 +246,104 @@ export default {
                       self.rewardmount=res.data.data.reward;
                       self.isShow2=temp2;
                       self.isShow1=temp1;
-                      setTimeout(function(){self.loading=false;},500)
+                       if (self.pg1<res.data.data.total) {
+                                 self.pagesize='查看更多'
+                                  
+                                }else{
+                                  self.pagesize='无更多数据'
+                                }
+                      setTimeout(function(){self.loading=false;},500);
           console.log(res);
         }).catch(function (error) {
           console.log(error);
         }); 
-        axios.get('http://pay.queyoujia.com/user/consume/member',{params:{'uid':self.uids,'startTime':self.date1,'endTime':self.date2,'cid':'2','channel':'fuyang',sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'}}).then(function (res) {
+        axios.get('http://pay.queyoujia.com/user/consume/member',{params:{'uid':self.uids,'startTime':self.date1,'endTime':self.date2,page:self.pagechose,'cid':sessionStorage.cid,'channel':sessionStorage.channel}}).then(function (res) {
                             self.tableData2=[];
                             self.consumeall=res.data.data.consumeTotal;
                             self.tableData2=res.data.data.consume;
+                          if (self.pg2<res.data.data.total) {
+                                self.moreOrelse='查看更多'                        
+                              }else{
+                                self.moreOrelse='无更多数据'
+                              }
           console.log(res);
         }).catch(function (error) {
           console.log(error);
-        }); 
-        /* var params2={'uid':'2061160','startTime':self.date1,'endTime':self.date2,'cid':'2','channel':'fuyang',sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'}
-        axios.post('http://pay.queyoujia.com/user/consume/member',qs.stringify(params2),{headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                      }}).then(function(res){
-                        console.log(res);
-                        self.tableData2=[];
-                        self.consumeall=res.data.data.consumeTotal;
-                        self.tableData2=res.data.data.consume;
-        }).catch(function (err) {
-          console.log(err);
-        })  */        
-      }
-      else{
-         self.$message({
-          title: '警告',
-          message: '结束时间不能不开始时间早',
-          type: 'warning'
         });
-         self.loading=false;
-      } 
       }
-     else{
-       self.$message({
-        title: '警告',
-        message: '结束时间不能不开始时间早',
-        type: 'warning'
-      });
+      else if (!self.date1||!self.date2) {self.$message({
+                          title: '警告',
+                          message: '请确认时间',
+                          type: 'warning'
+                        });}else{
+        axios.get('http://pay.queyoujia.com/user/charge/member',{params:{'uid':self.uids,'startTime':self.date1,'endTime':self.date2,page:self.pagechose,'cid':sessionStorage.cid,'channel':sessionStorage.channel}}).then(function (res) {
+                                      console.log(res);
+                                self.tableData3=[];
+                              //self.consumeall=res.data.data.consumeTotal;
+                              self.tableData3=res.data.data.charge;
+                              self.chargemount=res.data.data.chargeTotal;
+                              self.rewardmount=res.data.data.reward;
+                              self.isShow2=temp2;
+                              self.isShow1=temp1;
+                                if (self.pg1<res.data.data.total) {
+                                 self.pagesize='查看更多'
+                                  
+                                }else{
+                                  self.pagesize='无更多数据'
+                                }
+                              setTimeout(function(){self.loading=false;},500);
+                  console.log(res);
+                }).catch(function (error) {
+                  console.log(error);
+                }); 
+        axios.get('http://pay.queyoujia.com/user/consume/member',{params:{'uid':self.uids,'startTime':self.date1,'endTime':self.date2,'cid':sessionStorage.cid,'channel':sessionStorage.channel,page:self.pagechose}}).then(function (res) {
+                            self.tableData2=[];
+                          self.consumeall=res.data.data.consumeTotal;
+                          self.tableData2=res.data.data.consume;
+                          self.total2=res.data.data.total;
+                          if (self.pg2<res.data.data.total) {
+                                self.moreOrelse='查看更多'                        
+                              }else{
+                                self.moreOrelse='无更多数据'
+                              }
+            }).catch(function (error) {
+              console.log(error);
+            }); 
+                          }
        self.loading=false;
     }   
       }
   },
   mounted(){
     var self =this ;
-  /*  var params={'uid':'2061160','startTime':self.date1,'endTime':self.date2,'cid':'2','channel':'fuyang',sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'}
-    axios.post('http://pay.queyoujia.com/user/charge/member',qs.stringify(params),{headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                  }}).then(function(res){
-                      console.log(res);
-                      self.tableData3=[];
-                      //self.consumeall=res.data.data.consumeTotal;
-                      self.tableData3=res.data.data.charge;
-                      self.chargemount=res.data.data.chargeTotal;
-                      self.rewardmount=res.data.data.reward;
-    }).catch(function (err) {
-      console.log(err);
-    })*/
-    /* var params2={'uid':'2061160','startTime':self.date1,'endTime':self.date2,'cid':'2','channel':'fuyang',sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'}
-    axios.post('http://pay.queyoujia.com/user/consume/member',qs.stringify(params2),{headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                  }}).then(function(res){
-                    console.log(res);
-                      self.tableData2=[];
-                      self.consumeall=res.data.data.consumeTotal;
-                      self.tableData2=res.data.data.consume;
-    }).catch(function (err) {
-      console.log(err);
-    })*/
-     axios.get('http://pay.queyoujia.com/user/charge/member?cid=2&channel=fuyang&sid=9c8104987b3e7c170121412bb6afd439&toid=1218482&token=vk92SYb6349245').then(function (res) {
+     axios.get('http://pay.queyoujia.com/user/charge/member',{params:{'cid':sessionStorage.cid,'channel':sessionStorage.channel}}).then(function (res) {
                        self.tableData3=[];
+                       self.total1=null;
                       //self.consumeall=res.data.data.consumeTotal;
                       self.tableData3=res.data.data.charge;
                       self.chargemount=res.data.data.chargeTotal;
                       self.rewardmount=res.data.data.reward;
-                       console.log(res);
+                      self.total1=res.data.data.total;
+                         if (self.pg1<res.data.data.total) {
+                            self.pagesize='查看更多'
+                            
+                          }else{
+                            self.pagesize='无更多数据'
+                          }
   }).catch(function (error) {
     console.log(error);
   }); 
-    axios.get('http://pay.queyoujia.com/user/consume/member?cid=2&channel=fuyang&sid=9c8104987b3e7c170121412bb6afd439&toid=1218482&token=vk92SYb6349245').then(function (res) {
+    axios.get('http://pay.queyoujia.com/user/consume/member',{params:{'cid':sessionStorage.cid,'channel':sessionStorage.channel}}).then(function (res) {
                       self.tableData2=[];
+                      self.total2=null;
                       self.consumeall=res.data.data.consumeTotal;
                       self.tableData2=res.data.data.consume;
-    console.log(res);
+                      self.total2=res.data.data.total;
+                      if (self.pg2<res.data.data.total) {
+                            self.moreOrelse='查看更多'                        
+                          }else{
+                            self.moreOrelse='无更多数据'
+                          }
   }).catch(function (error) {
     console.log(error);
   }); 
@@ -268,14 +351,12 @@ export default {
     self.isShow2=true;
     self.tabbg1=true;
     self.tabbg2=false;
-    console.log(document.body.clientHeight);
-      console.log(document);
-      self.TDheight=(document.body.clientHeight/2).toString();
-      console.log(self.TDheight);
   },
   computed:{
     tbkey(){
-     
+     var self=this;
+     self.TDheight=(window.screen.availHeight)/3.3;
+     console.log(window.screen.availHeight);
     }
   },
   destroyed(){
@@ -303,4 +384,6 @@ export default {
         .fade-enter, .fade-leave-active {
           opacity: 0
         }
+.more{text-align: center;cursor: pointer;color: #5e7382;}
+.more:active{color: #58B7FF;}
 </style>

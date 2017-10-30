@@ -16,7 +16,7 @@ export default {
   name: 'diamondssold',
   data () {
     return {
-      cansold: 11,
+      cansold: null,
       seccode:'验证ID',
       uids:null,
       count:null
@@ -26,7 +26,7 @@ export default {
   	 getid:function () {
   	 var self =this;
   	 console.log(33);
-  	  var params={uid:self.uids,cid:'2',channel:'fuyang',token:"vkvvSY710d4ee8",told:'2061160',sid:'626b61d318811b48cfb7303e0c016e92'}//参数
+  	  var params={uid:self.uids,cid:sessionStorage.cid,channel:sessionStorage.channel}//参数
           axios.post('http://pay.queyoujia.com/user/check',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
@@ -45,7 +45,7 @@ export default {
   },
   besure:function () {
   	var self =this;
-  	 var params={uid:self.uids,cid:'2',channel:'fuyang',token:"vkvvSY710d4ee8",told:'2061160',sid:'626b61d318811b48cfb7303e0c016e92',amount:self.count}//参数
+  	 var params={uid:self.uids,cid:sessionStorage.cid,channel:sessionStorage.channel,/*token:"vkvvSY710d4ee8",told:'2061160',sid:'626b61d318811b48cfb7303e0c016e92',*/amount:self.count}//参数
   	  axios.post('http://pay.queyoujia.com/user/transfer',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
@@ -65,6 +65,15 @@ export default {
             console.log(err);
           })
   }
+  },
+  mounted(){
+    var self =this;
+    axios.get('http://pay.queyoujia.com/user/diamond',{params:{cid:sessionStorage.cid,channel:sessionStorage.channel/*sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'*/}}).then(function (res) {
+      console.log(res);
+      self.cansold=res.data.data.diamond;
+    }).catch(function (err) {
+      console.log(err);
+    })
   }
 }
 </script>

@@ -107,7 +107,7 @@ export default {
         //console.log(self.date1);
         if (self.date1&&self.date2) {
           if (self.date2>=self.date1) {
-            var params={startTime:self.date1,endTime:self.date2,cid:'2',channel:'fuyang',sid:'0b2a8fd90acf4cfc1dad7b1a9e831a79'}
+            var params={startTime:self.date1,endTime:self.date2,cid:sessionStorage.cid,channel:sessionStorage.channel,sid:'0b2a8fd90acf4cfc1dad7b1a9e831a79'}
           axios.post('http://pay.queyoujia.com/user/team/info',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
@@ -140,7 +140,7 @@ export default {
 },
 mounted:function () {
   var self =this;
-  var params={startTime:self.date1,endTime:self.date2,cid:'2',channel:'fuyang',sid:'0b2a8fd90acf4cfc1dad7b1a9e831a79'};
+  var params={startTime:self.date1,endTime:self.date2,cid:sessionStorage.cid,channel:sessionStorage.channel,sid:'0b2a8fd90acf4cfc1dad7b1a9e831a79'};
   axios.post('http://pay.queyoujia.com/user/team/info',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {

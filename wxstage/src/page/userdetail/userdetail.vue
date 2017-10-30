@@ -3,23 +3,23 @@
   <div class="userdetail">
   	<el-row class="bgrow">
 	  	<el-col :span="10" :offset="1" class="brb">姓名</el-col>
-	  	<el-col :span="11" class="alig brb textpri">2061160</el-col>
+	  	<el-col :span="11" class="alig brb textpri">{{name}}</el-col>
 	</el-row>
 	<el-row class="bgrow">
 	  	<el-col :span="10" :offset="1" class="brb">联系电话</el-col>
-	  	<el-col :span="11" class="alig brb textpri">011784</el-col>
+	  	<el-col :span="11" class="alig brb textpri">{{tel}}</el-col>
 	</el-row>
 	<el-row class="bgrow">
 	  	<el-col :span="10" :offset="1" class="brb">加入时间</el-col>
-	  	<el-col :span="11" class="alig brb textpri">10</el-col>
+	  	<el-col :span="11" class="alig brb textpri">{{gettime}}</el-col>
 	</el-row>
 	<el-row class="bgrow">
 	  	<el-col :span="10" :offset="1" class="brb">我的游戏</el-col>
-	  	<el-col :span="11" class="alig brb textpri">10</el-col>
+	  	<el-col :span="11" class="alig brb textpri">{{mygame}}</el-col>
 	</el-row>
 	<el-row class="bgrow">
 	  	<el-col :span="10" :offset="1" class="brb">我的地区</el-col>
-	  	<el-col :span="11" class="alig brb textpri">10</el-col>
+	  	<el-col :span="11" class="alig brb textpri">{{myzoom}}</el-col>
 	</el-row>
   </div>
 </transition>
@@ -32,7 +32,11 @@ export default {
   name: 'userdetail',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+     name:null,
+     tel:null,
+     gettime:null,
+     mygame:null,
+     myzoom:null
     }
   },
   methods:{
@@ -40,11 +44,24 @@ export default {
   },
   mounted(){
   	var self = this;
-  	var params={cid:'2',channel:'fuyang',}
+  	var params={cid:sessionStorage.cid,channel:sessionStorage.channel}
   	axios.post('http://pay.queyoujia.com/user/info',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
                       	console.log(res)
+                        self.name=res.data.data.nickname;
+                        self.tel=res.data.data.mobile;
+                        self.gettime=res.data.data.dateline;
+                        if (res.data.data.cid==1) {
+                          self.mygame='全民大冶'
+                        }else if(res.data.data.cid==2){
+                          self.mygame='八道雀神'
+                        }else{return}
+                        if (res.data.data.channel=='hz') {
+                          self.myzoom='杭州'
+                        }else if(res.data.data.channel=='fuyang'){
+                          self.myzoom='富阳'
+                        }else{return}
                       }).catch(function (err) {
                       	console.log(err);
                       })

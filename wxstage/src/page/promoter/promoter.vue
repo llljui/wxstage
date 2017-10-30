@@ -1,6 +1,6 @@
 <template>
   <transition name="fade" mode="in-out">
-  <div class="promoter">
+  <div class="promoter"   v-loading="loading">
   	<el-col :span="14" :offset="1" class="mrt"><el-input placeholder="请输入推广员ID" v-model="prouid"></el-input></el-col>
   	<el-col :span="7" :offset="1" class="searchbtn"><el-button type="primary" style="width:100%" @click="searchinfo">查询</el-button></el-col>
   	<el-table
@@ -42,6 +42,7 @@
       </template>
     </el-table-column>
   </el-table>
+  <div class="more" @click="lookmore">{{moreOrelse}}</div>
      <!--  <el-pagination
        class="pagetab"
        small
@@ -71,7 +72,11 @@ export default {
         currentPage4: 4,
         tabH:null,
         prouid:null,
-        pormember:null
+        pormember:null,
+        moreOrelse:null,
+        loading:false,
+        pagesize:1,
+        pagechose:1
     }
     },
     methods:{
@@ -92,7 +97,7 @@ export default {
       },
       searchinfo:function () {
         var self =this ;
-        var params={uid:self.prouid,cid:'2',channel:'fuyang',sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'}
+        var params={uid:self.prouid,cid:sessionStorage.cid,channel:sessionStorage.channel,page:self.pagechose}
         axios.post('http://pay.queyoujia.com/user/promoter/agent',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
@@ -102,6 +107,36 @@ export default {
                       }).catch(function (err) {
                         console.log(err);
                       })
+      },
+      searchinfo2:function () {
+        var self =this ;
+        var params={uid:self.prouid,cid:sessionStorage.cid,channel:sessionStorage.channel,page:self.pagechose}
+        axios.post('http://pay.queyoujia.com/user/promoter/agent',qs.stringify(params),{headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                      }}).then(function (res) {
+                        res.data.data.list.forEach(function (item,index) {
+                          self.tableData3.push(item);
+                          console.log(item);
+                        });
+                      }).catch(function (err) {
+                        console.log(err);
+                      })
+      },
+      lookmore:function () {
+        var self =this;
+        console.log(22);
+        if (self.moreOrelse='无更多数据') {
+          self.loading=false
+          self.pagechose++;
+          self.searchinfo2();
+        }else{
+          self.loading=true;
+          self.pagechose++;
+          self.searchinfo2();
+        }
+        setTimeout(function () {
+          self.loading=false;
+        },1000)
       }
     },
     computed:{
@@ -115,9 +150,9 @@ export default {
         console.log(self.tabH);
       }else{
         if (window.screen.availHeight<570) {
-          self.tabH='350';
+          self.tabH='300';
         }else{
-          self.tabH=(window.screen.availHeight-500+((560/window.screen.availHeight)*320));    
+          self.tabH=(window.screen.availHeight-500+((560/window.screen.availHeight)*280));    
           console.log(device_type);
         }
       }
@@ -126,7 +161,7 @@ export default {
   },
   mounted(){
     var self =this ;
-    var params={cid:'2',channel:'fuyang',sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'};
+    var params={cid:'2',channel:'fuyang'};
     axios.post('http://pay.queyoujia.com/user/promoter/agent',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
@@ -134,6 +169,11 @@ export default {
                         self.tableData3=[];
                         self.tableData3=res.data.data.list;
                         self.pormember=res.data.data.number;
+                        if (self.pagesize<res.data.data.total) {
+                            self.moreOrelse='查看更多'
+                          }else{
+                            self.moreOrelse='无更多数据'
+                          }
                         //Event.$emit('pros_end',res.data.data.number)
                         //sessionStorage.pormember=res.data.data.number;
                       }).catch(function (err) {
@@ -159,4 +199,6 @@ export default {
           opacity: 0
         }
 .rts{text-align: right;font-size: 0.7rem;position: absolute;top: 2vh;right: 5vw;padding-top: 2%;color: white;line-height: 4vh;}
+.more{text-align: center;cursor: pointer;color: #5e7382;}
+.more:active{color: #58B7FF;}
 </style>

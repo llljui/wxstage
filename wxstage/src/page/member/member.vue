@@ -1,6 +1,6 @@
 <template>
   <transition name="fade" mode="in-out">
-  <div class="member">
+  <div class="member"   v-loading="loading">
   	<el-col :span="14" :offset="1" class="mrt"><el-input placeholder="请输入用户ID" v-model="userid"></el-input></el-col>
   	<el-col :span="7" :offset="1" class="searchbtn"><el-button type="primary" style="width:100%" @click="searchmember">查询</el-button></el-col>
   	<el-table
@@ -42,6 +42,7 @@
       </template>
     </el-table-column>
   </el-table>
+  <div class="more" @click="lookmore">{{moreOrelse}}</div>
     <!-- <el-pagination
       class="pagetab"
       small
@@ -63,12 +64,14 @@ export default {
   name: 'member',
   data () {
     return {
-     tableData3: [],
-        currentPage1: 5,
-        currentPage2: 5,
+        tableData3: [],
         currentPage3: 5,
-        currentPage4: 4,
-        userid:null
+        userid:null,
+        moreOrelse:null,
+        loading:false,
+        pagesize:1,
+        pagechose:1,
+        tabletemp:[]
     }
   },
   methods:{
@@ -89,16 +92,58 @@ export default {
       },
       searchmember:function () {
         var self =this;
-        var params={uid:self.userid,cid:'2',channel:'fuyang',sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'}
+        self.pagesize=1;
+        self.pagechose=1;
+        self.tabletemp=[];
+        var params={uid:self.userid,cid:sessionStorage.cid,channel:sessionStorage.channel,sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'}
         axios.post('http://pay.queyoujia.com/user/member/list',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
-                        console.log(res);
+                        console.log(res.data.data.list);
                         self.tableData3=[];
+                       // self.tabletemp.push(res.data.data.list);
                         self.tableData3=res.data.data.list;
+                       if (self.pagesize<res.data.data.total) {
+                          self.moreOrelse='查看更多';
+                        }else{
+                          self.moreOrelse='无更多数据'
+                        }
                       }).catch(function (err) {
                         console.log(err)
                       })
+      },
+      searchmember2:function () {
+        var self =this;
+        var params={uid:self.userid,cid:sessionStorage.cid,channel:sessionStorage.channel,sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245',page:self.pagechose}
+        axios.post('http://pay.queyoujia.com/user/member/list',qs.stringify(params),{headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                      }}).then(function (res) {
+                        res.data.data.list.forEach(function (item,index) {
+                         self.tableData3.push(item);
+                        });              
+                        console.log(self.tableData3);
+                       if (self.pagesize<res.data.data.total) {
+                          self.moreOrelse='查看更多';
+                        }else{
+                          self.moreOrelse='无更多数据'
+                        }
+                      }).catch(function (err) {
+                        console.log(err)
+                      })
+      },
+      lookmore:function () {
+         var self =this;
+        console.log(22);
+       if (self.moreOrelse='无更多数据') {
+          self.loading=false;
+        }else{
+          self.loading=true;
+          self.pagechose++;
+          self.searchmember2();
+        }
+        setTimeout(function () {
+          self.loading=false;
+        },1000)
       }
   },
   computed:{
@@ -108,13 +153,13 @@ export default {
       console.log(window.screen.availHeight);
       if (device_type.indexOf('Nexus')!=-1) {
         console.log('Nexus');
-        self.tabH=(window.screen.availHeight-500+(560/window.screen.availHeight)*250);
+        self.tabH=(window.screen.availHeight-500+(560/window.screen.availHeight)*280);
         console.log(self.tabH);
       }else{
         if (window.screen.availHeight<570) {
-          self.tabH='350';
+          self.tabH='320';
         }else{
-          self.tabH=(window.screen.availHeight-500+((560/window.screen.availHeight)*320));    
+          self.tabH=(window.screen.availHeight-500+((560/window.screen.availHeight)*280));    
           console.log(device_type);
         }
       }
@@ -123,12 +168,18 @@ export default {
   },
   mounted(){
     var self =this ;
-    var params={cid:'2',channel:'fuyang',sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'}
+    var params={cid:sessionStorage.cid,channel:sessionStorage.channel,sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'}
     axios.post('http://pay.queyoujia.com/user/member/list',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
                         console.log(res);
                         self.tableData3=res.data.data.list;
+                        self.tabletemp=res.data.data.list;
+                         if (self.pagesize<res.data.data.total) {
+                            self.moreOrelse='查看更多'
+                          }else{
+                            self.moreOrelse='无更多数据'
+                          }
                       }).catch(function (err) {
                         console.log(err);
                       })
@@ -150,4 +201,6 @@ export default {
         .fade-enter, .fade-leave-active {
           opacity: 0
         }
+.more{text-align: center;cursor: pointer;color: #5e7382;}
+.more:active{color: #58B7FF;}
 </style>

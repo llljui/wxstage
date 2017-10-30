@@ -72,7 +72,7 @@ export default {
   },
   mounted(){
     var self =this ;
-    var params={uid:sessionStorage.promoterid,cid:'2',channel:"fuyang",sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'}
+    var params={uid:sessionStorage.promoterid,cid:sessionStorage.cid,channel:sessionStorage.channel}
     axios.post('http://pay.queyoujia.com/user/member/detail',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
@@ -110,8 +110,8 @@ export default {
     },
     searchinfo:function () {
       var self =this ;
-
-      var params={startTime:self.date1,endTime:self.date2,uid:sessionStorage.promoterid,cid:'2',channel:"fuyang",sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'}
+      if (self.date1&&self.date2&&self.date2-self.date1>0) {
+        var params={startTime:self.date1,endTime:self.date2,uid:sessionStorage.promoterid,cid:sessionStorage.cid,channel:sessionStorage.channel}
       axios.post('http://pay.queyoujia.com/user/promoter/detail',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
@@ -127,6 +127,14 @@ export default {
                       }).catch(function (err) {
                         console.log(err);
                       })
+      }else{
+        self.$message({
+          title: '警告',
+          message: '请核实输入时间，时间间隔不超过20天',
+          type: 'warning'
+        });
+      }
+      
     }
   }
 }

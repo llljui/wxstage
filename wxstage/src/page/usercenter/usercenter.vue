@@ -3,24 +3,24 @@
   <div class="usercenter">
   	<el-row class="bgrow">
 	  	<el-col :span="10" :offset="1" class="brb">用户ID</el-col>
-	  	<el-col :span="11" class="alig brb textpri">2061160</el-col>
+	  	<el-col :span="11" class="alig brb textpri" v-html="uids"></el-col>
 	</el-row>
 	<el-row class="bgrow">
 	  	<el-col :span="10" :offset="1" class="brb">我的邀请码</el-col>
-	  	<el-col :span="11" class="alig brb textpri">011784</el-col>
+	  	<el-col :span="11" class="alig brb textpri">{{ucode}}</el-col>
 	</el-row>
 	<el-row class="bgrow">
 	  	<el-col :span="10" :offset="1" class="brb">剩余钻石</el-col>
-	  	<el-col :span="11" class="alig brb textpri">10</el-col>
+	  	<el-col :span="11" class="alig brb textpri">{{diamond}}</el-col>
 	</el-row>
-	<el-row class="bgrow">
-	  	<el-col :span="10" :offset="1" class="brb"><div @click="changegame">切换游戏</div></el-col>
-	  	<el-col :span="11" class="alig brb"><div  @click="changegame"><i class="el-icon-arrow-right"></i></div></el-col>
-	</el-row>
-	<el-row class="bgrow">
-	  	<el-col :span="10" :offset="1" class="brb"><div  @click="bindtel">绑定手机号</div></el-col>
-	  	<el-col :span="11" class="alig brb"><div  @click="bindtel"><i class="el-icon-arrow-right"></i></div></el-col>
-	</el-row>
+<!--   <el-row class="bgdiamondrow">
+    <el-col :span="10" :offset="1" class="brb"><div @click="changegame">切换游戏</div></el-col>
+    <el-col :span="11" class="alig brb"><div  @click="changegame"><i class="el-icon-arrow-right"></i></div></el-col>
+</el-row>-->
+<el-row class="bgrow">
+    <el-col :span="10" :offset="1" class="brb"><div  @click="bindtel">绑定手机号</div></el-col>
+    <el-col :span="11" class="alig brb"><div  @click="bindtel"><i class="el-icon-arrow-right"></i></div></el-col>
+</el-row> 
 	<el-row class="bgrow">
 	  	<el-col :span="10" :offset="1" class="brb"><div  @click="userdetail">查看个人资料</div></el-col>
 	  	<el-col :span="11" class="alig brb"><div  @click="userdetail"><i class="el-icon-arrow-right"></i></div></el-col>
@@ -30,11 +30,15 @@
 </template>
 
 <script>
+import axios from 'axios';
+import qs from 'qs';
 export default {
   name: 'usercenter',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      diamond:null,
+      uids:null,
+      ucode:null
     }
   },
   methods:{
@@ -49,6 +53,18 @@ export default {
   			var self =this;
   			this.$router.push({path: '/bindtel'});
   	}
+  },
+  mounted(){
+    var self =this;
+    axios.get('http://pay.queyoujia.com/user/info',{params:{cid:sessionStorage.cid,channel:sessionStorage.channel}}).then(function (res) {
+      console.log(res.data.data);
+      self.uids=res.data.data.uid;
+      self.ucode=res.data.data.no;
+      self.diamond=res.data.data.rich.diamond;
+      sessionStorage.myuid=res.data.data.uid;
+    }).catch(function (err) {
+      console.log(err)
+    })
   }
 }
 </script>
