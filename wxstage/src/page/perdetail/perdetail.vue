@@ -99,7 +99,7 @@ export default {
       lookmore:function () {
          var self =this;
         console.log(22);
-        if (self.moreOrelse='无更多数据') {
+        if (self.moreOrelse=='无更多数据') {
           self.loading=false
         }else{
           self.pagenow++;

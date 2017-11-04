@@ -141,8 +141,8 @@ export default {
   	searchinfo:function () {
   		console.log(222);
   		var self =this ;
-      var params={cid:sessionStorage.cid,channel:sessionStorage.channel/*sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245',uid:'2061160'*/,startTime:Date.parse(self.date1)/1000,endTime:Date.parse(self.date2)/1000}
-	    axios.post('http://pay.queyoujia.com/user/startlight/exchangeInfo',qs.stringify(params),{headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(function (res) {
+      self.nowpage=1;
+	    axios.get('http://pay.queyoujia.com/user/startlight/exchangeInfo',{params:{cid:sessionStorage.cid,channel:sessionStorage.channel,startTime:Date.parse(self.date1)/1000,endTime:Date.parse(self.date2)/1000}}).then(function (res) {
 	                         console.log(res);
                            self.nowpage=1;
                            self.tableData=[];
@@ -167,8 +167,7 @@ export default {
       searchinfo2:function () {
       //console.log(222);
       var self =this ;
-      var params={cid:sessionStorage.cid,channel:sessionStorage.channel,/*sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245',*/startTime:Date.parse(self.date1)/1000,endTime:Date.parse(self.date2)/1000,page:self.nowpage}
-      axios.post('http://pay.queyoujia.com/user/startlight/exchangeInfo',qs.stringify(params),{headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(function (res) {
+      axios.get('http://pay.queyoujia.com/user/startlight/exchangeInfo',{params:{cid:sessionStorage.cid,channel:sessionStorage.channel,startTime:Date.parse(self.date1)/1000,endTime:Date.parse(self.date2)/1000,page:self.nowpage}}).then(function (res) {
                            console.log(res);
                            var tabletemp=[];
                            tabletemp=res.data.data.list;

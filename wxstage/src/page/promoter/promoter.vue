@@ -24,7 +24,7 @@
       label="昵称">
     </el-table-column>
     <el-table-column
-      prop="dateline"
+      prop="charge"
       align="center"
       sortable
       width="120"
@@ -53,7 +53,7 @@
      layout="prev, next, jumper"
      :total="1000">
          </el-pagination> -->
-         <div class="rts">推广员列表:{{pormember}}</div>
+    <div class="rts">推广员列表:{{pormember}}</div>
   </div>
 </transition>
 </template>
@@ -114,6 +114,11 @@ export default {
         axios.post('http://pay.queyoujia.com/user/promoter/agent',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
+                          if (self.pagesize<res.data.data.total) {
+                            self.moreOrelse='查看更多'
+                          }else{
+                            self.moreOrelse='无更多数据'
+                          }
                         res.data.data.list.forEach(function (item,index) {
                           self.tableData3.push(item);
                           console.log(item);
@@ -125,10 +130,10 @@ export default {
       lookmore:function () {
         var self =this;
         console.log(22);
-        if (self.moreOrelse='无更多数据') {
-          self.loading=false
-          self.pagechose++;
-          self.searchinfo2();
+        if (self.moreOrelse=='无更多数据') {
+          /*self.loading=false
+          self.pagechose++;*/
+          //self.searchinfo2();
         }else{
           self.loading=true;
           self.pagechose++;

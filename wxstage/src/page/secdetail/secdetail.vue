@@ -37,6 +37,13 @@
 		      label="推广员">
 		    </el-table-column>
 		    <el-table-column
+		      prop="nickname"
+		      min-width="120"
+		      align="center"
+		      label="昵称">
+		    </el-table-column>
+		    <el-table-column
+		      sortable
 		      prop="number"
 		      align="center"
 		      min-width="120"
@@ -126,7 +133,7 @@ export default {
   	lookmore:function () {
         var self =this;
         console.log(22);
-        if (self.moreOrelse='无更多数据') {
+        if (self.moreOrelse=='无更多数据') {
           self.loading=false
         }else{
           self.loading=true
@@ -138,7 +145,7 @@ export default {
   },
   mounted(){
   	var self = this;
-  	var params={startTime:Date.parse(self.date1)/1000,endTime:Date.parse(self.date2)/1000,cid:sessionStorage.cid,channel:sessionStorage.channel}
+  	var params={/*startTime:Date.parse(self.date1)/1000,endTime:Date.parse(self.date2)/1000,*/cid:sessionStorage.cid,channel:sessionStorage.channel}
   	axios.post('http://pay.queyoujia.com/user/team/promoter',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {

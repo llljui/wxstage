@@ -34,12 +34,13 @@
     :height="tableH"
     border>
     <el-table-column
-      prop="date"
+      prop="amount"
       align="center"
       label="充值金额">
     </el-table-column>
     <el-table-column
-      prop="name"
+      min-width="110"
+      prop="paidTime"
       align="center"
       label="充值时间">
     </el-table-column>
@@ -106,7 +107,7 @@ export default {
       var self =this ;
         //console.log(self.date1);
            self.pagesize=1
-            var params={startTime:self.date1,endTime:self.date2,cid:sessionStorage.cid,channel:sessionStorage.channel}
+            var params={cid:sessionStorage.cid,channel:sessionStorage.channel}
           axios.post('http://pay.queyoujia.com/user/charge/person',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
@@ -130,7 +131,7 @@ export default {
       submit:function () {
         var self =this ;
         pagesize:1;
-        var params={startTime:self.value1,endTime:self.value2,cid:sessionStorage.cid,channel:sessionStorage.channel}
+        var params={startTime:Date.parse(self.value1)/1000,endTime:Date.parse(self.value2)/1000,cid:sessionStorage.cid,channel:sessionStorage.channel}
           axios.post('  http://pay.queyoujia.com/user/charge/person',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
@@ -151,7 +152,7 @@ export default {
       submit2:function () {
         var self =this ;
         pagesize:1;
-        var params={startTime:self.value1,endTime:self.value2,cid:sessionStorage.cid,channel:sessionStorage.channel,page:self.pagechose}
+        var params={startTime:Date.parse(self.value1)/1000,endTime:Date.parse(self.value2)/1000,cid:sessionStorage.cid,channel:sessionStorage.channel,page:self.pagechose}
           axios.post('  http://pay.queyoujia.com/user/charge/person',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
@@ -175,7 +176,7 @@ export default {
       lookmore:function () {
         var self =this;
         console.log(22);
-       if (self.moreOrelse='无更多数据') {
+       if (self.moreOrelse=='无更多数据') {
         return;
         }else{
           self.loading=true;

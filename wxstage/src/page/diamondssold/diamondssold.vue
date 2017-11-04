@@ -18,58 +18,73 @@ export default {
     return {
       cansold: null,
       seccode:'验证ID',
-      uids:null,
-      count:null
+      uids:'',
+      count:null,
+      nowid:null,
+      err:null
     }
   },
   methods:{
   	 getid:function () {
   	 var self =this;
-  	 console.log(33);
+     self.nowid=self.uids;
   	  var params={uid:self.uids,cid:sessionStorage.cid,channel:sessionStorage.channel}//参数
           axios.post('http://pay.queyoujia.com/user/check',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
-            console.log(res.data.data.nickname);
-            if (!res.data.data.nickname) {
-            	 self.$message({
-		          message: '游戏ID不存在',
-		          type: 'warning'
-		        });
+            console.log(res.data.code);
+            if (res.data.code==0) {
+                	 self.uids=res.data.data.nickname;
+                   console.log(self.uids);
             }else{
-            	 self.uids=res.data.data.nickname;
+              self.$message({
+                  message: '请重新输入ID，并校验！',
+                  type: 'warning'
+                 });
+               self.err='请重新输入ID，并校验！';
             }
           }).catch(function (err) {
             console.log(err);
           })
   },
   besure:function () {
-  	var self =this;
-  	 var params={uid:self.uids,cid:sessionStorage.cid,channel:sessionStorage.channel,/*token:"vkvvSY710d4ee8",told:'2061160',sid:'626b61d318811b48cfb7303e0c016e92',*/amount:self.count}//参数
-  	  axios.post('http://pay.queyoujia.com/user/transfer',qs.stringify(params),{headers: {
+  	 var self =this;
+     if (self.nowid) {         
+                var params={uid:self.nowid,cid:sessionStorage.cid,channel:sessionStorage.channel,amount:self.count}//参数
+               axios.post('http://pay.queyoujia.com/user/transfer',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
             console.log(res.data.data.nickname);
             if (res.data.code=='0') {
-            	 self.$message({
-		          message: '出售成功',
-		          type: 'success'
-		        });
+               self.$message({
+              message: '出售成功',
+              type: 'success'
+            });
+               self.nowid=null;
+               self.uids=null;
+               self.count=null;
+               self.err='';
             }else{
-            	self.$message({
-		          message: res.data.message,
-		          type: 'error'
-		        });
+              self.$message({
+              message: res.data.message,
+              type: 'error'
+            });
             }
           }).catch(function (err) {
             console.log(err);
           })
+                         
+     }else{
+      self.$message({
+              message: '请先验证',
+              type: 'warning'
+              }) 
+     }	
   }
   },
   mounted(){
     var self =this;
-    axios.get('http://pay.queyoujia.com/user/diamond',{params:{cid:sessionStorage.cid,channel:sessionStorage.channel/*sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'*/}}).then(function (res) {
-      console.log(res);
+    axios.get('http://pay.queyoujia.com/user/diamond',{params:{cid:sessionStorage.cid,channel:sessionStorage.channel}}).then(function (res) {
       self.cansold=res.data.data.diamond;
     }).catch(function (err) {
       console.log(err);

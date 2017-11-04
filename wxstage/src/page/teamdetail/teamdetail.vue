@@ -44,7 +44,7 @@
         </el-table-column>
         <el-table-column
           prop="paidTime"
-          min-width="120"
+          width="110"
           align="center"
           label="充值时间">
         </el-table-column>
@@ -53,7 +53,7 @@
      <div class="more" @click="lookmore" v-show="pag2">{{pagesize}}</div>
   </div>
   <div v-show='isShow2'>
-  <el-col :span="22" :offset='1' class="mart brb">钻石消耗总额：<span class="textb">{{consumeall}}张</span></el-col>
+  <el-col :span="22" :offset='1' class="mart brb">钻石消耗总额：<span class="textb">{{consumeall}}颗</span></el-col>
   <el-table
         :data="tableData2"
         :height="TDheight"
@@ -80,7 +80,7 @@
         <el-table-column
           prop="dateline"
           align="center"
-          min-width="120"
+          width="110"
           label="消耗时间">
         </el-table-column>
      </el-table>
@@ -138,7 +138,7 @@ export default {
       lookmore:function (val) {
         var self =this;
         if (val==1) {
-           if (self.moreOrelse='无更多数据') {
+           if (self.moreOrelse=='无更多数据') {
               self.loading=false;
             }else{
               self.loading=true;
@@ -146,7 +146,7 @@ export default {
               self.searchinfo2();
             }
         }else if(val==2){
-          if (self.pagesize='无更多数据') {
+          if (self.pagesize=='无更多数据') {
               self.loading=false
             }else{
               self.loading=true;
@@ -170,6 +170,7 @@ export default {
           self.col2="#20A0FF";
           self.pag1=true;
           self.pag2=false;
+          self.searchinfo();
         }else if(val==2){
           console.log(self.isShow2);
           self.isShow1=true;
@@ -180,6 +181,7 @@ export default {
           self.col1="#20A0FF";
           self.pag1=false;
           self.pag2=true;
+          self.searchinfo();
         }else{return;}
       },
       searchinfo2:function () {

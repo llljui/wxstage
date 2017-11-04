@@ -114,16 +114,15 @@ export default {
       },
       searchmember2:function () {
         var self =this;
-        var params={uid:self.userid,cid:sessionStorage.cid,channel:sessionStorage.channel,page:self.pagechose}
-        axios.post('http://pay.queyoujia.com/user/member/list',qs.stringify(params),{headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                      }}).then(function (res) {
+       /* var params={cid:sessionStorage.cid,channel:sessionStorage.channel,page:self.pagechose}*/
+        axios.get('http://pay.queyoujia.com/user/member/list',{params:{cid:sessionStorage.cid,channel:sessionStorage.channel,page:self.pagechose}}).then(function (res) {
                         res.data.data.list.forEach(function (item,index) {
                          self.tableData3.push(item);
                         });              
                         console.log(self.tableData3);
-                       if (self.pagesize<res.data.data.total) {
+                       if (self.pagechose<res.data.data.total) {
                           self.moreOrelse='查看更多';
+                          console.log(item);
                         }else{
                           self.moreOrelse='无更多数据'
                         }
@@ -134,9 +133,13 @@ export default {
       lookmore:function () {
          var self =this;
         console.log(22);
-       if (self.moreOrelse='无更多数据') {
+       if (self.moreOrelse=='无更多数据') {
           self.loading=false;
-        }else{
+          /* self.loading=true;
+          self.pagechose++;
+          self.searchmember2();*/
+        }
+        else{
           self.loading=true;
           self.pagechose++;
           self.searchmember2();

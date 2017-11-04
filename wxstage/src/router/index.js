@@ -160,6 +160,22 @@ export default new Router({
       hidden: true,
       noDropdown: true,
       children: [{ path: 'promoterdetail', name:'推广员明细', component: _import('promoterdetail/promoterdetail') }]
-    }  
+    },
+    {
+      path:'/jstc',
+      component:layout,
+      redirect: 'jstc/jstc',
+      hidden: true,
+      noDropdown: true,
+      children: [{ path: 'jstc', name:'结算提成', component: _import('jstc/jstc') }]
+    },
+    {
+      path:'/smrz',
+      component:layout,
+      redirect: 'smrz/smrz',
+      hidden: true,
+      noDropdown: true,
+      children: [{ path: 'smrz', name:'实名认证', component: _import('smrz/smrz') }]
+    } 
   ]
 })

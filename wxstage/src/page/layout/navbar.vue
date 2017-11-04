@@ -1,8 +1,8 @@
 <template>
   <div class="mynavbar" :key="keys">
-      <el-dropdown trigger="click">
+      <el-dropdown trigger="click" style="">
             <el-button type="text">
-              数据统计
+              <i class="el-icon-fa el-icon-fa-line-chart el-icon--left"></i>数据统计
             </el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item><router-link to="/teamrechanger">团队充值统计</router-link></el-dropdown-item>
@@ -13,9 +13,9 @@
       </el-dropdown>
       <el-dropdown trigger="click">
         <el-button type="text">
-            会员管理
+           <i class="el-icon-fa el-icon-fa-sitemap el-icon--left"></i>会员管理
           </el-button>
-          <el-dropdown-menu slot="dropdown" >
+          <el-dropdown-menu slot="dropdown">
             <el-dropdown-item><router-link to="/member">我的会员</router-link></el-dropdown-item>
             <el-dropdown-item><router-link to="/promoter">我的推广员</router-link></el-dropdown-item>
             <el-dropdown-item v-if="navshow2"><router-link to="/authorize">代理授权</router-link></el-dropdown-item>
@@ -23,13 +23,14 @@
       </el-dropdown>
       <el-dropdown trigger="click">
           <el-button type="text">
-            个人中心
+            <i class="el-icon-fa el-icon-fa-user el-icon--left"></i>个人中心
           </el-button>
           <el-dropdown-menu slot="dropdown" >
           <!--   <el-dropdown-item><router-link to="/diamondsbuy">钻石购买</router-link></el-dropdown-item> -->
             <el-dropdown-item v-if="navshow3"><router-link to="/commission">提成结算</router-link></el-dropdown-item>
             <el-dropdown-item><router-link to="/diamondssold" @click.once="menahid">钻石出售</router-link></el-dropdown-item>
             <el-dropdown-item><router-link to="/usercenter">个人账户</router-link></el-dropdown-item>
+            <el-dropdown-item><router-link to="/jstc">结算提成</router-link></el-dropdown-item>
           </el-dropdown-menu>
       </el-dropdown>
   </div>
@@ -79,14 +80,15 @@ export default {
                              self.$router.push({path:'/parsearch'});
                              self.navshow1=true;
                              self.navshow2=true;
-                             self.navshow3=true;
+                            self.navshow3=true;
                              sessionStorage.status='1';
+                             sessionStorage.HHR='hhr'
                              console.log('合伙人身份')
                         }else{
                             self.$router.push({path:'/teamrechanger'});
                             self.navshow1=false;
-                             self.navshow2=false;
-                             self.navshow3=false;
+                            self.navshow2=false;
+                            self.navshow3=false;
                               console.log('不是合伙人身份');
                               sessionStorage.status='1';
                           }
@@ -118,5 +120,5 @@ a {
 nav{margin:0 auto;display: block;width: 90%;}
 nav ul li{display: inline-block; width: 30%;text-align: center;height: 10vh;padding-top: 5%;color: #8492A6;}
 .el-dropdown{width: 32%;margin:0;}
-.el-dropdown button{width: 100%;border:none;height: 10vh;color: #1F2D3D;}
+.el-dropdown button{width: 100%;border:none;height: 10vh;color: #677586;}
 </style>

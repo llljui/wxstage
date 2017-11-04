@@ -18,11 +18,11 @@
 	</div>
 	</el-col>
     <el-col :span="10" :offset="1" class="mart">
-        <el-date-picker :default-value="yesdate" type="date" placeholder="选择日期" v-model="date1" style="width: 100%;"></el-date-picker>
+        <el-date-picker :default-value="yesdate" type="date" :picker-options="pickerOptions0" placeholder="选择日期" v-model="date1" style="width: 100%;"></el-date-picker>
     </el-col>
      <el-col :span="2" class="mart">-</el-col>
     <el-col :span="10" class="mart tablet">
-        <el-date-picker :default-value="todaydate" type="date" placeholder="选择日期" v-model="date2" style="width: 100%;"></el-date-picker>
+        <el-date-picker :default-value="todaydate" type="date" :picker-options="pickerOptions0" placeholder="选择日期" v-model="date2" style="width: 100%;"></el-date-picker>
     </el-col>
     <el-col :span="22" :offset="1" class="search"><el-button width="100%" @click="searchinfo" type="primary">查询</el-button></el-col>
     <el-col :span="10" :offset="1" class="tablet">充值总额：<span>{{rechargeall}}</span>元</el-col>
@@ -115,9 +115,11 @@ export default {
                         self.tableData=[];
                         self.yqcode="邀请码："+res.data.data.no;
                         self.tableData=res.data.data.list;
+                        self.rechargeall=res.data.data.chargeTotal;
                         self.members=res.data.data.member;
-                        self.rewardall=res.data.data.rewardTotal;
+                        self.rewardall=res.data.data.starlight;
                         self.agent=res.data.data.agent;
+                        self.returnall=res.data.data.rewardTotal;
                       }).catch(function (err) {
                         console.log(err);
                       })
@@ -148,7 +150,7 @@ mounted:function () {
                         self.yqcode="邀请码："+res.data.data.no;
                         self.tableData=res.data.data.list;
                         self.members=res.data.data.member;
-                        self.rewardall=res.data.data.rewardTotal;
+                        self.rewardall=res.data.data.starlight;
                         self.agent=res.data.data.agent;
                         self.rechargeall=res.data.data.chargeTotal;
                         self.returnall=res.data.data.rewardTotal;
