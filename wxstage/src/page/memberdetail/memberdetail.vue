@@ -76,7 +76,7 @@ export default {
   },
   mounted(){
   	var self =this ;
-  	var params={uid:sessionStorage.memberuid,cid:'2',channel:"fuyang",sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'}
+  	var params={uid:sessionStorage.memberuid,cid:sessionStorage.cid,channel:sessionStorage.channel}
   	axios.post('http://pay.queyoujia.com/user/member/detail',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {

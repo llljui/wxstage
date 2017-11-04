@@ -68,6 +68,14 @@
   	 	      :total="1000">
   	 	    </el-pagination>
   	 	  </div> -->
+        <div class="borbg" @click="hshow" v-show="showbor"></div>
+        <div class="bor" v-show="showbor">
+          <el-col :span="22" :offset="1" class="aaddss">
+           <el-input type="number" placeholder="请输入验证码" v-model="checkcode"></el-input>
+           <el-button  @click="hpost" type="primary" class="btn">确认</el-button>
+            <el-button @click="hshow" class="btn">取消</el-button>
+          </el-col>
+        </div>
   </div>
 </transition>
 </template>
@@ -79,8 +87,8 @@ export default {
   name: 'commission',
   data () {
     return {
-      members:'6666',
-      agent:'1111',
+      members:null,
+      agent:null,
       date1:null,
       date2:null,
       currentPage3: 5,
@@ -95,22 +103,94 @@ export default {
       amountBonus:[],
       btnStatus:null,
       btncolor:null,
-      statusable:null
+      statusable:null,
+      pagesize:null,
+      checkcode:null,
+      showbor:false,
+      newparams:null
     }
   },
   methods:{
+    postinfo:function () {
+      var self =this;
+      self.showbor=true;
+    },
+    hpost:function () {
+     var self =this;
+      axios.post('http://pay.queyoujia.com/user/startlight/exchangeInfo',qs.stringify(self.newparams),{headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(function (res) {
+                    if (res.data.code==0) {
+                       self.$message({
+                      type: 'success',
+                      message: '提现申请成功'
+                    });
+                    }else{
+                      self.$message({
+                      type: 'info',
+                      message: res.data.message
+                    });
+                    }
+                    }).catch(function () {
+                      console.log(err);
+                    })
+      self.showbor=false;
+    },
+    hshow:function () {
+      var self =this;
+      self.showbor=false;
+    },
   	searchinfo:function () {
   		console.log(222);
   		var self =this ;
-	    var params={cid:sessionStorage.cid,channel:sessionStorage.channel,sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245',startTime:self.date1,endTime:self.date2}
-	    axios.post('  		http://pay.queyoujia.com/user/startlight/history',qs.stringify(params),{headers: {
-	                            'Content-Type': 'application/x-www-form-urlencoded'
-	                      }}).then(function (res) {
-	                        console.log(res);
+      var params={cid:sessionStorage.cid,channel:sessionStorage.channel/*sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245',uid:'2061160'*/,startTime:Date.parse(self.date1)/1000,endTime:Date.parse(self.date2)/1000}
+	    axios.post('http://pay.queyoujia.com/user/startlight/exchangeInfo',qs.stringify(params),{headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(function (res) {
+	                         console.log(res);
+                           self.nowpage=1;
+                           self.tableData=[];
+                           self.amountBonus=[];
+                           self.tableData=res.data.data.list;
+                           res.data.data.list.forEach(function (item,index) {
+                           self.tableData[index].amountBonus=item.amountBonus*item.amount;
+                           self.tableData[index].money=item.amountBonus*item.amount+item.amount;
+                         });       
+                         setTimeout(function () {
+                            self.loading=false;
+                          },300)                
+                         if (self.nowpage<res.data.data.totalPage) {
+                            self.moreOrelse='查看更多'
+                          }else{
+                            self.moreOrelse='无更多数据'
+                          } 
 	                      }).catch(function (err) {
 	                        console.log(err);
 	                      })
 	  	},
+      searchinfo2:function () {
+      //console.log(222);
+      var self =this ;
+      var params={cid:sessionStorage.cid,channel:sessionStorage.channel,/*sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245',*/startTime:Date.parse(self.date1)/1000,endTime:Date.parse(self.date2)/1000,page:self.nowpage}
+      axios.post('http://pay.queyoujia.com/user/startlight/exchangeInfo',qs.stringify(params),{headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(function (res) {
+                           console.log(res);
+                           var tabletemp=[];
+                           tabletemp=res.data.data.list;
+                           res.data.data.list.forEach(function (item,index) {
+                           tabletemp[index].amountBonus=item.amountBonus*item.amount;
+                           tabletemp[index].money=item.amountBonus*item.amount+item.amount;
+                         });
+                            tabletemp.forEach(function (item,index) {
+                                self.tableData.push(item);
+                            }) ;
+                            setTimeout(function () {
+                              self.loading=false;
+                            },300)                  
+                         if (self.nowpage<res.data.data.totalPage) {
+                            self.moreOrelse='查看更多'
+                          }else{
+                            self.moreOrelse='无更多数据'
+                          } 
+                        }).catch(function (err) {
+                          console.log(err);
+                        })
+      },
 	  	handleSizeChange(val) {
 	        console.log(`每页 ${val} 条`);
 	      },
@@ -119,18 +199,23 @@ export default {
 	      },
       lookmore:function () {
          var self =this;
-        console.log(22);
-        if (self.moreOrelse='无更多数据') {
-          self.loading=false
-        }else{
-          self.loading=true
-        }
-        setTimeout(function () {
+        if (self.moreOrelse=='无更多数据') {
           self.loading=false;
-        },1000)
+        }else{
+          self.loading=true;
+          self.nowpage++;
+          self.searchinfo2();
+        }
       },
       handleEdit(index, row) {
-        console.log(index, row);
+        var self =this;
+        if (row.status=="提现") {
+            self.showbor=true;
+            var params={uid:row.uid,status:row.status,orderId:row.orderId,code:self.checkcode,reason:row.reason}
+            self.newparams=params;
+        }else{
+          return;
+        }
       },
       handleDelete(index, row) {
         console.log(index, row);
@@ -162,18 +247,22 @@ export default {
       now.setHours('00', '00', '00', '0');
       self.yesdate=now.getTime()/1000-86400;
       self.todaydate=now.getTime()/1000;//获取凌晨时间
-    var params={cid:'1',channel:"hz",sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245',uid:'2061160',startTime:self.yesdate,endTime:self.todaydate}
+    var params={cid:sessionStorage.cid,channel:sessionStorage.channel,/*,sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245',uid:'2061160',*/startTime:self.yesdate,endTime:self.todaydate}
     axios.post('http://pay.queyoujia.com/user/startlight/exchangeInfo',qs.stringify(params),{headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(function (res) {
-                         console.log(res);
-                         self.tableData=[];
-                         self.amountBonus=[];
-                         self.tableData=res.data.data.list;
-
-                         res.data.data.list.forEach(function (item,index) {
+                           console.log(res);
+                           self.tableData=[];
+                           self.amountBonus=[];
+                           self.tableData=res.data.data.list;
+                           self.members=res.data.data.totalSum;
+                           self.agent=res.data.data.totalSumNow;
+                           res.data.data.list.forEach(function (item,index) {
                            self.tableData[index].amountBonus=item.amountBonus*item.amount;
                            self.tableData[index].money=item.amountBonus*item.amount+item.amount;
-                         });                       
-                         if (self.nowpage<res.totalPage) {
+                         });       
+                         setTimeout(function () {
+                            self.loading=false;
+                          },100)                
+                         if (self.nowpage<res.data.totalPage) {
                             self.moreOrelse='查看更多'
                           }else{
                             self.moreOrelse='无更多数据'
@@ -209,4 +298,8 @@ export default {
         }
 .more{text-align: center;cursor: pointer;color: #5e7382}
 .more:active{color: #58B7FF;}
+.borbg{opacity: 0.6;position: fixed;top: 0;right: 0;left: 0;bottom:0;margin: auto;z-index: 8888;width:100%;height: 100%;background-color: black;}
+.bor{position: fixed;top: 0;right: 0;left: 0;bottom:0;margin: auto;z-index: 9888;width:90%;height:30vh;background-color: white;border-radius: 5px;}
+.aaddss{padding-top: 8vh;}
+.btn{margin-top: 5vh;float: right;margin-right:15vw;}
 </style>

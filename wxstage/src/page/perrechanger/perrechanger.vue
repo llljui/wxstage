@@ -105,6 +105,7 @@ export default {
     mounted(){
       var self =this ;
         //console.log(self.date1);
+           self.pagesize=1
             var params={startTime:self.date1,endTime:self.date2,cid:sessionStorage.cid,channel:sessionStorage.channel}
           axios.post('http://pay.queyoujia.com/user/charge/person',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
@@ -128,7 +129,8 @@ export default {
     methods:{
       submit:function () {
         var self =this ;
-        var params={startTime:self.value1,endTime:self.value2,cid:sessionStorage.cid,channel:sessionStorage.channel,page:self.pagechose}
+        pagesize:1;
+        var params={startTime:self.value1,endTime:self.value2,cid:sessionStorage.cid,channel:sessionStorage.channel}
           axios.post('  http://pay.queyoujia.com/user/charge/person',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
@@ -146,14 +148,39 @@ export default {
                         console.log(err);
                       })  
       },
+      submit2:function () {
+        var self =this ;
+        pagesize:1;
+        var params={startTime:self.value1,endTime:self.value2,cid:sessionStorage.cid,channel:sessionStorage.channel,page:self.pagechose}
+          axios.post('  http://pay.queyoujia.com/user/charge/person',qs.stringify(params),{headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                      }}).then(function (res) {
+                        console.log(res.data.data);
+                        var tabletemp=[];
+                       // self.yqcode=res.data.data.no;
+                        //self.tgcode=res.data.data.uid;
+                         tabletemp=res.data.data.list;
+                         tabletemp.forEach(function (item,index) {
+                           self.tableData.push(item);
+                         })
+                        if (self.pagesize<res.data.data.total) {
+                                  self.moreOrelse='查看更多'
+                                }else{
+                                  self.moreOrelse='无更多数据'
+                                } 
+                      }).catch(function (err) {
+                        console.log(err);
+                      })  
+      },
       lookmore:function () {
         var self =this;
         console.log(22);
        if (self.moreOrelse='无更多数据') {
+        return;
         }else{
           self.loading=true;
           self.pagechose++;
-          self.submit();
+          self.submit2();
         }
         setTimeout(function () {
           self.loading=false;

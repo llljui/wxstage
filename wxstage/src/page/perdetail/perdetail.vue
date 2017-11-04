@@ -51,19 +51,47 @@ export default {
       tableData:[],
       tableH:null,
       moreOrelse:null,
-        loading:false
+      loading:false,
+      pagesize:null,
+      pagenow:1
     }
   },
   methods:{
   	  onSubmit() {
         var self =this ;
-        var params={cid:'2',channel:"fuyang",sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245','page':1,startTime:self.date1,endTime:self.date2}
+        self.pagenow=1;
+        var params={cid:'2',channel:"fuyang",sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245','page':1,startTime:Date.parse(self.date1)/1000,endTime:Date.parse(self.date2)/1000}
         axios.post('      http://pay.queyoujia.com/user/team/infoPartner',qs.stringify(params),{headers: {
                               'Content-Type': 'application/x-www-form-urlencoded'
                         }}).then(function (res) {
                           console.log(res);
                           self.tableData=[];
                           self.tableData=res.data.data.list;
+                          if (self.pagesize<res.data.data.total) {
+                            self.moreOrelse='查看更多'
+                          }else{
+                            self.moreOrelse='无更多数据'
+                          }
+                        }).catch(function (err) {
+                          console.log(err);
+                        })
+      },
+       onSubmit2() {
+        var self =this ;
+        var params={cid:sessionStorage.cid,channel:sessionStorage.channel,sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245','page':self.pagenow,startTime:Date.parse(self.date1)/1000,endTime:Date.parse(self.date2)/1000,page:self.pagenow}
+        axios.post('http://pay.queyoujia.com/user/team/infoPartner',qs.stringify(params),{headers: {
+                              'Content-Type': 'application/x-www-form-urlencoded'
+                        }}).then(function (res) {
+                          console.log(res);
+                          tabletemp=res.data.data.list;
+                          tabletemp.forEach(function (item,index) {
+                            self.tableData.push(item);
+                          })
+                          if (self.pagesize<res.data.data.total) {
+                            self.moreOrelse='查看更多'
+                          }else{
+                            self.moreOrelse='无更多数据'
+                          }
                         }).catch(function (err) {
                           console.log(err);
                         })
@@ -74,7 +102,9 @@ export default {
         if (self.moreOrelse='无更多数据') {
           self.loading=false
         }else{
-          self.loading=true
+          self.pagenow++;
+          self.loading=true;
+          self.onSubmit2();
         }
         setTimeout(function () {
           self.loading=false;
@@ -88,14 +118,15 @@ export default {
       /*self.yesdate=now.getTime()/1000-86400;
       self.todaydate=now.getTime()/1000;//获取凌晨时间*/
       var self=this;
-      var params={cid:'2',channel:"fuyang",sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245','page':1}
+      self.pagesize=1;
+      var params={cid:sessionStorage.cid,channel:sessionStorage.channel,sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245','page':1}
       axios.post('http://pay.queyoujia.com/user/team/infoPartner',qs.stringify(params),{headers: {
                               'Content-Type': 'application/x-www-form-urlencoded'
                         }}).then(function (res) {
                           console.log(res);
                           self.tableData=[];
                           self.tableData=res.data.data.list;
-                          if (true) {
+                          if (self.pagesize<res.data.data.total) {
                             self.moreOrelse='查看更多'
                           }else{
                             self.moreOrelse='无更多数据'

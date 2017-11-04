@@ -1,6 +1,6 @@
 <template>
   <div class="authorize">
-  	<el-col :span="14" :offset="1"><el-input placeholder="输入推广员ID/邀请码" type="number" class="mrt" @change="inputin"></el-input></el-col>
+  	<el-col :span="14" :offset="1"><el-input placeholder="输入推广员ID/邀请码" type="number" v-model="uids" class="mrt" @change="inputin"></el-input></el-col>
   	<el-col :span="7"  :offset="1"><el-button class="mrt btnw" type="primary" @click="searchinfo">查询</el-button></el-col>
   	<el-col :span="22" :offset="1" class="bgtext mrt">{{nickname}}</el-col>
   	<el-col :span="22" :offset="1" class="sq mrt"><div class="sq" @click="promoter">授权</div></el-col>
@@ -22,11 +22,22 @@ export default {
   	promoter:function () {
   		console.log(454);
   		var self =this;
-  		var params={hz:'hz',uid:self.uids,token:"vkvvSY710d4ee8",told:'2061160',sid:'626b61d318811b48cfb7303e0c016e92',cid:'2',channel:'fuyang'}
+  		var params={hz:'hz',uid:self.uids,cid:sessionStorage.cid,channel:sessionStorage.channel}
   		axios.post('http://pay.queyoujia.com/user/promoter/auth',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
-                        console.log(res);
+                        if (res.data.code==0) {
+                             self.$message({
+                            message: '授权成功',
+                            type: 'success'
+                          });
+                          }else{
+                             self.$message({
+                            message: res.data.message,
+                            type: 'warning'
+                          });
+                        }
+
                       }).catch(function (err) {
                         console.log(err);
                       }); 
@@ -38,15 +49,11 @@ export default {
   	},
   	searchinfo:function () {
   		var self =this;
-  		var params={hz:'hz',uid:self.uids,token:"vkvvSY710d4ee8",told:'2061160',sid:'626b61d318811b48cfb7303e0c016e92',cid:'2',channel:'fuyang'}
-  		axios.post('http://pay.queyoujia.com/user/member/list',qs.stringify(params),{headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                      }}).then(function (res) {
-                        console.log(res);
-                        if (true) {
-
+  		axios.get('http://pay.queyoujia.com/user/check',{params:{hz:'hz',uid:self.uids,cid:sessionStorage.cid,channel:sessionStorage.channel}}).then(function (res) {
+                 if (res.data.code==0) {
+                           self.nickname=res.data.data.nickname;
                         }else{
-
+                           self.nickname=res.data.message;
                         }
                         //self.uids=res.data.data;
                       }).catch(function (err) {

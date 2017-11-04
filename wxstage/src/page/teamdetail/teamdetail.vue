@@ -1,7 +1,7 @@
 <template>
   <transition name="fade" mode="in-out">
   <div class="teamdetail" v-loading="loading" :key="tbkey"> 
-  	<el-col :span="10" :offset="1" class="mart">
+    <el-col :span="10" :offset="1" class="mart">
         <el-date-picker type="date" placeholder="选择日期" v-model="date1" style="width: 100%;"></el-date-picker>
     </el-col>
      <el-col :span="2"  class="mart">-</el-col>
@@ -9,84 +9,84 @@
         <el-date-picker type="date" placeholder="选择日期" v-model="date2" style="width: 100%;"></el-date-picker>
     </el-col>
     <el-col :span='22' :offset="1" class="mart">
-    	<el-input placeholder="请输入游戏ID" v-model="uids"></el-input>
+      <el-input placeholder="请输入游戏ID" v-model="uids"></el-input>
     </el-col>
     <el-col :span='22' :offset="1" class="mart serbtn">
-   		<el-button @click="searchinfo" class="btnser" type="primary">查询</el-button>
-	</el-col>
+      <el-button @click="searchinfo" class="btnser" type="primary">查询</el-button>
+  </el-col>
 <el-col :span="11" :offset="1" class="cusdetail" :style="{background:tabg1,color:col1}"><div @click="tabbg(1)">钻石消耗明细</div></el-col>
 <el-col :span="11" class="recdetail" :style="{background:tabg2,color:col2}"><div @click="tabbg(2)">充值明细</div></el-col>
-	<div v-show='isShow1'>
-		<el-col :span="11" :offset="1" class="rechargeM">充值金额<br><span class="textb">{{chargemount}}</span></el-col>
-		<el-col :span="11" class="returndetail">返利总额<br><span class="textb">{{rewardmount}}</span></el-col>
-		 <el-table
-		    :data="tableData3"
-		    :height="TDheight"
-		    border
-		    style="width: 100%">
-		    <el-table-column
-		      prop="uid"
+  <div v-show='isShow1'>
+    <el-col :span="11" :offset="1" class="rechargeM">充值金额<br><span class="textb">{{chargemount}}</span></el-col>
+    <el-col :span="11" class="returndetail">返利总额<br><span class="textb">{{rewardmount}}</span></el-col>
+     <el-table
+        :data="tableData3"
+        :height="TDheight"
+        border
+        style="width: 100%">
+        <el-table-column
+          prop="uid"
           min-width="100"
-		      align="center"
-		      label="游戏ID">
-		    </el-table-column>
-		    <el-table-column
-		      prop="nickname"
+          align="center"
+          label="游戏ID">
+        </el-table-column>
+        <el-table-column
+          prop="nickname"
           min-width="100"
-		      align="center"
-		      label="游戏昵称">
-		    </el-table-column>
-		    <el-table-column
-		      prop="amount"
+          align="center"
+          label="游戏昵称">
+        </el-table-column>
+        <el-table-column
+          prop="amount"
           min-width="100"
-		      align="center"
-		      label="充值金额">
-		    </el-table-column>
-		    <el-table-column
-		      prop="paidTime"
+          align="center"
+          label="充值金额">
+        </el-table-column>
+        <el-table-column
+          prop="paidTime"
           min-width="120"
-		      align="center"
-		      label="充值时间">
-		    </el-table-column>
-		 </el-table>
+          align="center"
+          label="充值时间">
+        </el-table-column>
+     </el-table>
      <div class="more" @click="lookmore" v-show="pag1">{{moreOrelse}}</div>
      <div class="more" @click="lookmore" v-show="pag2">{{pagesize}}</div>
-	</div>
-	<div v-show='isShow2'>
-	<el-col :span="22" :offset='1' class="mart brb">钻石消耗总额：<span class="textb">{{consumeall}}张</span></el-col>
-	<el-table
-		    :data="tableData2"
-		    :height="TDheight"
-		    border
-		    style="width: 100%;">
-		    <el-table-column
-		      prop="uid"
+  </div>
+  <div v-show='isShow2'>
+  <el-col :span="22" :offset='1' class="mart brb">钻石消耗总额：<span class="textb">{{consumeall}}张</span></el-col>
+  <el-table
+        :data="tableData2"
+        :height="TDheight"
+        border
+        style="width: 100%;">
+        <el-table-column
+          prop="uid"
             min-width="100"
-		      align="center"
-		      label="游戏ID">
-		    </el-table-column>
-		    <el-table-column
-		      prop="nickname"
+          align="center"
+          label="游戏ID">
+        </el-table-column>
+        <el-table-column
+          prop="nickname"
            min-width="100"
-		      align="center"
-		      label="游戏昵称">
-		    </el-table-column>
-		    <el-table-column
-		      prop="amount"
+          align="center"
+          label="游戏昵称">
+        </el-table-column>
+        <el-table-column
+          prop="amount"
             min-width="100"
-		      align="center"
-		      label="钻石消耗">
-		    </el-table-column>
-		    <el-table-column
-		      prop="dateline"
-		      align="center"
+          align="center"
+          label="钻石消耗">
+        </el-table-column>
+        <el-table-column
+          prop="dateline"
+          align="center"
           min-width="120"
-		      label="消耗时间">
-		    </el-table-column>
-		 </el-table>
+          label="消耗时间">
+        </el-table-column>
+     </el-table>
      <div class="more" @click="lookmore(1)" v-show="pag1">{{moreOrelse}}</div>
      <div class="more" @click="lookmore(2)" v-show="pag2">{{pagesize}}</div>
-	</div>
+  </div>
   </div>
 </transition>
 </template>
@@ -131,8 +131,8 @@ export default {
     }
   },
   methods:{
-  	 handleClick(tab, event) {
-  	 	var self =this;
+     handleClick(tab, event) {
+      var self =this;
         console.log(tab, event);
       },
       lookmore:function (val) {
@@ -142,8 +142,8 @@ export default {
               self.loading=false;
             }else{
               self.loading=true;
-              self.pagechose=self.pg1;
-              self.searchinfo();
+              self.pagechose=self.pg1++;
+              self.searchinfo2();
             }
         }else if(val==2){
           if (self.pagesize='无更多数据') {
@@ -151,7 +151,7 @@ export default {
             }else{
               self.loading=true;
               self.pagechose=self.pg2++;
-              self.searchinfo();
+              self.searchinfo2();
             }
         }else{return}
         setTimeout(function () {
@@ -160,7 +160,7 @@ export default {
       },
       tabbg(val) {
         self =this;
-      	if (val==1) {
+        if (val==1) {
           console.log(self.isShow1);
           self.isShow2=true;
           self.isShow1=false;
@@ -170,7 +170,7 @@ export default {
           self.col2="#20A0FF";
           self.pag1=true;
           self.pag2=false;
-      	}else if(val==2){
+        }else if(val==2){
           console.log(self.isShow2);
           self.isShow1=true;
           self.isShow2=false;
@@ -180,20 +180,161 @@ export default {
           self.col1="#20A0FF";
           self.pag1=false;
           self.pag2=true;
-      	}else{return;}
+        }else{return;}
+      },
+      searchinfo2:function () {
+         var self =this ;
+        var temp1=self.isShow1;
+        var temp2=self.isShow2;
+        /*self.isShow2=true;
+        self.isShow1=true;
+        self.loading=true;*/
+        self.pagechose=1;
+        if (self.date1&&self.date2) {
+           if (self.date2>=self.date1&&((self.date2-self.date1)/86400000)<20) {
+            axios.get('http://pay.queyoujia.com/user/charge/member',{params:{'uid':self.uids,'startTime':Date.parse(self.date1)/1000,'endTime':Date.parse(self.date2)/1000,'cid':sessionStorage.cid,'channel':sessionStorage.channel,page:self.pagechose}}).then(function (res) {
+                                var tabletemp=[];
+                                tabletemp=res.data.data.charge;
+                                tabletemp.forEach(function (item,index) {
+                                  self.tableData3.push(item);
+                                })
+                                //self.consumeall=res.data.data.consumeTotal;
+                                self.chargemount=res.data.data.chargeTotal;
+                                self.rewardmount=res.data.data.reward;
+                                self.isShow2=temp2;
+                                self.isShow1=temp1;
+
+
+                                 if (self.pg2<res.data.data.total) {
+                                 self.pagesize='查看更多'
+                                  
+                                }else{
+                                  self.pagesize='无更多数据'
+                                }
+                                setTimeout(function(){self.loading=false;},500);
+                    console.log(res);
+                  }).catch(function (error) {
+                    console.log(error);
+                  }); 
+                  axios.get('http://pay.queyoujia.com/user/consume/member',{params:{'uid':self.uids,'startTime':Date.parse(self.date1)/1000,'endTime':Date.parse(self.date2)/1000,'cid':sessionStorage.cid,'channel':sessionStorage.channel,page:self.pagechose}}).then(function (res) {
+                                     tabletemp=res.data.data.consume;
+                            tabletemp.forEach(function (item,index) {
+                                  self.tableData2.push(item);
+                                })
+                            self.consumeall=res.data.data.consumeTotal;
+                                      if (self.pg1<res.data.data.total) {
+                                                   self.pagesize='查看更多'
+                                                    
+                                                  }else{
+                                                    self.pagesize='无更多数据'
+                                                  }
+                  }).catch(function (error) {
+                    console.log(error);
+                  });        
+                }
+      else{
+         self.$message({
+          title: '警告',
+          message: '结束时间不能不开始时间早,且时间间隔不大于20天',
+          type: 'warning'
+        });
+         self.loading=false;
+      } 
+      }
+     else{
+      if(!self.uids&&!self.date1||!self.date2){
+        axios.get('http://pay.queyoujia.com/user/charge/member',{params:{'uid':self.uids,'startTime':Date.parse(self.date1)/1000,'endTime':Date.parse(self.date2)/1000,'cid':sessionStorage.cid,'channel':sessionStorage.channel,page:self.pagechose}}).then(function (res) {
+                              console.log(res);
+                       tabletemp=res.data.data.charge;
+                                tabletemp.forEach(function (item,index) {
+                                  self.tableData3.push(item);
+                                })
+                      self.chargemount=res.data.data.chargeTotal;
+                      self.rewardmount=res.data.data.reward;
+                      self.isShow2=temp2;
+                      self.isShow1=temp1;
+                       if (self.pg1<res.data.data.total) {
+                                 self.pagesize='查看更多'
+                                  
+                                }else{
+                                  self.pagesize='无更多数据'
+                                }
+                      setTimeout(function(){self.loading=false;},500);
+          console.log(res);
+        }).catch(function (error) {
+          console.log(error);
+        }); 
+        axios.get('http://pay.queyoujia.com/user/consume/member',{params:{'uid':self.uids,'startTime':Date.parse(self.date1)/1000,'endTime':Date.parse(self.date2)/1000,page:self.pagechose,'cid':sessionStorage.cid,'channel':sessionStorage.channel}}).then(function (res) {
+                            tabletemp=res.data.data.consume;
+                            tabletemp.forEach(function (item,index) {
+                                  self.tableData2.push(item);
+                                })
+                            self.consumeall=res.data.data.consumeTotal;
+                          if (self.pg2<res.data.data.total) {
+                                self.moreOrelse='查看更多'                        
+                              }else{
+                                self.moreOrelse='无更多数据'
+                              }
+          console.log(res);
+        }).catch(function (error) {
+          console.log(error);
+        });
+      }
+      else if (!self.date1||!self.date2) {self.$message({
+                          title: '警告',
+                          message: '请确认时间',
+                          type: 'warning'
+                        });}else{
+        axios.get('http://pay.queyoujia.com/user/charge/member',{params:{'uid':self.uids,'startTime':Date.parse(self.date1)/1000,'endTime':Date.parse(self.date2)/1000,page:self.pagechose,'cid':sessionStorage.cid,'channel':sessionStorage.channel}}).then(function (res) {
+                                      tabletemp=res.data.data.charge;
+                                tabletemp.forEach(function (item,index) {
+                                  self.tableData3.push(item);
+                                })
+                              self.chargemount=res.data.data.chargeTotal;
+                              self.rewardmount=res.data.data.reward;
+                              self.isShow2=temp2;
+                              self.isShow1=temp1;
+                                if (self.pg1<res.data.data.total) {
+                                 self.pagesize='查看更多'
+                                  
+                                }else{
+                                  self.pagesize='无更多数据'
+                                }
+                              setTimeout(function(){self.loading=false;},500);
+                  console.log(res);
+                }).catch(function (error) {
+                  console.log(error);
+                }); 
+        axios.get('http://pay.queyoujia.com/user/consume/member',{params:{'uid':self.uids,'startTime':Date.parse(self.date1)/1000,'endTime':Date.parse(self.date2)/1000,'cid':sessionStorage.cid,'channel':sessionStorage.channel,page:self.pagechose}}).then(function (res) {
+                          tabletemp=res.data.data.consume;
+                            tabletemp.forEach(function (item,index) {
+                                  self.tableData3.push(item);
+                                })
+                            self.consumeall=res.data.data.consumeTotal;
+                          self.total2=res.data.data.total;
+                          if (self.pg2<res.data.data.total) {
+                                self.moreOrelse='查看更多'                        
+                              }else{
+                                self.moreOrelse='无更多数据'
+                              }
+            }).catch(function (error) {
+              console.log(error);
+            }); 
+                          }
+       self.loading=false;
+    }   
       },
       searchinfo:function(){
-
         var self =this ;
         var temp1=self.isShow1;
         var temp2=self.isShow2;
         /*self.isShow2=true;
         self.isShow1=true;
         self.loading=true;*/
+        self.pagechose=1;
         if (self.date1&&self.date2) {
            if (self.date2>=self.date1&&((self.date2-self.date1)/86400000)<20) {
-            axios.get('http://pay.queyoujia.com/user/charge/member',{params:{'uid':self.uids,'startTime':self.date1,'endTime':self.date2,'cid':sessionStorage.cid,'channel':sessionStorage.channel,page:self.pagechose}}).then(function (res) {
-                                        console.log(res);
+            axios.get('http://pay.queyoujia.com/user/charge/member',{params:{'uid':self.uids,'startTime':Date.parse(self.date1)/1000,'endTime':Date.parse(self.date2)/1000,'cid':sessionStorage.cid,'channel':sessionStorage.channel,page:self.pagechose}}).then(function (res) {
                                   self.tableData3=[];
                                 //self.consumeall=res.data.data.consumeTotal;
                                 self.tableData3=res.data.data.charge;
@@ -212,7 +353,7 @@ export default {
                   }).catch(function (error) {
                     console.log(error);
                   }); 
-                  axios.get('http://pay.queyoujia.com/user/consume/member',{params:{'uid':self.uids,'startTime':self.date1,'endTime':self.date2,'cid':sessionStorage.cid,'channel':sessionStorage.channel,page:self.pagechose}}).then(function (res) {
+                  axios.get('http://pay.queyoujia.com/user/consume/member',{params:{'uid':self.uids,'startTime':Date.parse(self.date1)/1000,'endTime':Date.parse(self.date2)/1000,'cid':sessionStorage.cid,'channel':sessionStorage.channel,page:self.pagechose}}).then(function (res) {
                                       self.tableData2=[];
                                       self.consumeall=res.data.data.consumeTotal;
                                       self.tableData2=res.data.data.consume;
@@ -237,7 +378,7 @@ export default {
       }
      else{
       if(!self.uids&&!self.date1||!self.date2){
-        axios.get('http://pay.queyoujia.com/user/charge/member',{params:{'uid':self.uids,'startTime':self.date1,'endTime':self.date2,'cid':sessionStorage.cid,'channel':sessionStorage.channel,page:self.pagechose}}).then(function (res) {
+        axios.get('http://pay.queyoujia.com/user/charge/member',{params:{'uid':self.uids,'startTime':Date.parse(self.date1)/1000,'endTime':Date.parse(self.date2)/1000,'cid':sessionStorage.cid,'channel':sessionStorage.channel,page:self.pagechose}}).then(function (res) {
                               console.log(res);
                         self.tableData3=[];
                       //self.consumeall=res.data.data.consumeTotal;
@@ -257,7 +398,7 @@ export default {
         }).catch(function (error) {
           console.log(error);
         }); 
-        axios.get('http://pay.queyoujia.com/user/consume/member',{params:{'uid':self.uids,'startTime':self.date1,'endTime':self.date2,page:self.pagechose,'cid':sessionStorage.cid,'channel':sessionStorage.channel}}).then(function (res) {
+        axios.get('http://pay.queyoujia.com/user/consume/member',{params:{'uid':self.uids,'startTime':Date.parse(self.date1)/1000,'endTime':Date.parse(self.date2)/1000,page:self.pagechose,'cid':sessionStorage.cid,'channel':sessionStorage.channel}}).then(function (res) {
                             self.tableData2=[];
                             self.consumeall=res.data.data.consumeTotal;
                             self.tableData2=res.data.data.consume;
@@ -276,7 +417,7 @@ export default {
                           message: '请确认时间',
                           type: 'warning'
                         });}else{
-        axios.get('http://pay.queyoujia.com/user/charge/member',{params:{'uid':self.uids,'startTime':self.date1,'endTime':self.date2,page:self.pagechose,'cid':sessionStorage.cid,'channel':sessionStorage.channel}}).then(function (res) {
+        axios.get('http://pay.queyoujia.com/user/charge/member',{params:{'uid':self.uids,'startTime':Date.parse(self.date1)/1000,'endTime':Date.parse(self.date2)/1000,page:self.pagechose,'cid':sessionStorage.cid,'channel':sessionStorage.channel}}).then(function (res) {
                                       console.log(res);
                                 self.tableData3=[];
                               //self.consumeall=res.data.data.consumeTotal;
@@ -296,7 +437,7 @@ export default {
                 }).catch(function (error) {
                   console.log(error);
                 }); 
-        axios.get('http://pay.queyoujia.com/user/consume/member',{params:{'uid':self.uids,'startTime':self.date1,'endTime':self.date2,'cid':sessionStorage.cid,'channel':sessionStorage.channel,page:self.pagechose}}).then(function (res) {
+        axios.get('http://pay.queyoujia.com/user/consume/member',{params:{'uid':self.uids,'startTime':Date.parse(self.date1)/1000,'endTime':Date.parse(self.date2)/1000,'cid':sessionStorage.cid,'channel':sessionStorage.channel,page:self.pagechose}}).then(function (res) {
                             self.tableData2=[];
                           self.consumeall=res.data.data.consumeTotal;
                           self.tableData2=res.data.data.consume;
@@ -316,7 +457,9 @@ export default {
   },
   mounted(){
     var self =this ;
-     axios.get('http://pay.queyoujia.com/user/charge/member',{params:{'cid':sessionStorage.cid,'channel':sessionStorage.channel}}).then(function (res) {
+    self.pg1=1;
+    self.pg2=1;
+     axios.get('http://pay.queyoujia.com/user/charge/member',{params:{'cid':sessionStorage.cid,'channel':sessionStorage.channel}}).then(function (res) {              
                        self.tableData3=[];
                        self.total1=null;
                       //self.consumeall=res.data.data.consumeTotal;
@@ -325,15 +468,14 @@ export default {
                       self.rewardmount=res.data.data.reward;
                       self.total1=res.data.data.total;
                          if (self.pg1<res.data.data.total) {
-                            self.pagesize='查看更多'
-                            
+                            self.pagesize='查看更多'                          
                           }else{
                             self.pagesize='无更多数据'
                           }
   }).catch(function (error) {
     console.log(error);
   }); 
-    axios.get('http://pay.queyoujia.com/user/consume/member',{params:{'cid':sessionStorage.cid,'channel':sessionStorage.channel}}).then(function (res) {
+     axios.get('http://pay.queyoujia.com/user/consume/member',{params:{'cid':sessionStorage.cid,'channel':sessionStorage.channel}}).then(function (res) {
                       self.tableData2=[];
                       self.total2=null;
                       self.consumeall=res.data.data.consumeTotal;

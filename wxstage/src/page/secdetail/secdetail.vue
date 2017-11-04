@@ -43,6 +43,7 @@
 		      label="会员">
 		    </el-table-column>
 		    <el-table-column
+		      sortable
 		      prop="consume"
 		      align="center"
 		      min-width="120"
@@ -83,10 +84,7 @@ export default {
   		var self = this;
   		 if (self.date1&&self.date2) {
   		 	if (self.date2>=self.date1&&((self.date2-self.date1)/86400000)<20) {
-	  	var params={startTime:self.date1,endTime:self.date2,cid:sessionStorage.cid,channel:sessionStorage.channel,uid:self.idinfo}
-	  	axios.post('http://pay.queyoujia.com/user/team/promoter',qs.stringify(params),{headers: {
-	                            'Content-Type': 'application/x-www-form-urlencoded'
-	                      }}).then(function (res) {
+	  	axios.get('http://pay.queyoujia.com/user/team/promoter',{params:{startTime:Date.parse(self.date1)/1000,endTime:Date.parse(self.date2)/1000,cid:sessionStorage.cid,channel:sessionStorage.channel,uid:self.idinfo}}).then(function (res) {
 	                        console.log(res.data.data);
 	                        self.tableData3=[];
 	                        self.tableData3=res.data.data.list;
@@ -101,10 +99,8 @@ export default {
 		                    });
                 		  }    
 	                  }else{
-	                  	if(!self.idinfo&&!self.date1||!self.date2){ var params={startTime:self.date1,endTime:self.date2,cid:sessionStorage.cid,channel:sessionStorage.channel,uid:self.idinfo}
-				  	axios.post('http://pay.queyoujia.com/user/team/promoter',qs.stringify(params),{headers: {
-				                            'Content-Type': 'application/x-www-form-urlencoded'
-				                      }}).then(function (res) {
+	                  	if(!self.idinfo&&!self.date1||!self.date2){ 
+				  	axios.get('http://pay.queyoujia.com/user/team/promoter',{params:{startTime:Date.parse(self.date1)/1000,endTime:Date.parse(self.date2)/1000,cid:sessionStorage.cid,channel:sessionStorage.channel,uid:self.idinfo}}).then(function (res) {
 				                        console.log(res.data.data);
 				                        self.tableData3=[];
 				                        self.tableData3=res.data.data.list;
@@ -116,10 +112,8 @@ export default {
 		                      message: '请确认时间',
 		                      type: 'warning'
 		                    });}else{
-	                  		 var params={startTime:self.date1,endTime:self.date2,cid:sessionStorage.cid,channel:sessionStorage.channel,uid:self.idinfo}
-				  	axios.post('http://pay.queyoujia.com/user/team/promoter',qs.stringify(params),{headers: {
-				                            'Content-Type': 'application/x-www-form-urlencoded'
-				                      }}).then(function (res) {
+	     
+				     	axios.get('http://pay.queyoujia.com/user/team/promoter',{params:{startTime:Date.parse(self.date1)/1000,endTime:Date.parse(self.date2)/1000,cid:sessionStorage.cid,channel:sessionStorage.channel,uid:self.idinfo}}).then(function (res) {
 				                        console.log(res.data.data);
 				                        self.tableData3=[];
 				                        self.tableData3=res.data.data.list;
@@ -144,7 +138,7 @@ export default {
   },
   mounted(){
   	var self = this;
-  	var params={startTime:self.date1,endTime:self.date2,cid:sessionStorage.cid,channel:sessionStorage.channel}
+  	var params={startTime:Date.parse(self.date1)/1000,endTime:Date.parse(self.date2)/1000,cid:sessionStorage.cid,channel:sessionStorage.channel}
   	axios.post('http://pay.queyoujia.com/user/team/promoter',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {

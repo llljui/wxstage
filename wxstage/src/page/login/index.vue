@@ -53,6 +53,7 @@ export default {
   	}
   },
   mounted(){
+    console.log(location.search);
     if (location.search.indexOf('cid=1')!=-1&&location.search.indexOf('channel=hz')!=-1) {
       document.title="全民大冶后台";
     }else if(location.search.indexOf('cid=2')!=-1&&location.search.indexOf('channel=fuyang')!=-1){

@@ -7,7 +7,7 @@ Vue.use(Router)
 import layout from '../page/layout/layout'
 export default new Router({
   routes: [
-     { path: '/',name:'首页',component: _import('layout/layout'), hidden: true },
+     { path: '/',name:'首页',component: _import('login/index'), hidden: true },
      { path: '/login',name:'登录',component: _import('login/index'), hidden: true },
      {
       path:'/partner',

@@ -16,7 +16,6 @@
             会员管理
           </el-button>
           <el-dropdown-menu slot="dropdown" >
-            <el-dropdown-item><router-link to="/diamondssold" @click.once="menahid">钻石出售</router-link></el-dropdown-item>
             <el-dropdown-item><router-link to="/member">我的会员</router-link></el-dropdown-item>
             <el-dropdown-item><router-link to="/promoter">我的推广员</router-link></el-dropdown-item>
             <el-dropdown-item v-if="navshow2"><router-link to="/authorize">代理授权</router-link></el-dropdown-item>
@@ -29,6 +28,7 @@
           <el-dropdown-menu slot="dropdown" >
           <!--   <el-dropdown-item><router-link to="/diamondsbuy">钻石购买</router-link></el-dropdown-item> -->
             <el-dropdown-item v-if="navshow3"><router-link to="/commission">提成结算</router-link></el-dropdown-item>
+            <el-dropdown-item><router-link to="/diamondssold" @click.once="menahid">钻石出售</router-link></el-dropdown-item>
             <el-dropdown-item><router-link to="/usercenter">个人账户</router-link></el-dropdown-item>
           </el-dropdown-menu>
       </el-dropdown>
@@ -68,32 +68,35 @@ export default {
     }else if(location.search.indexOf('cid=2')!=-1&&location.search.indexOf('channel=fuyang')!=-1){
       document.title="八道雀神后台";
     }else{console.log('其他标题')}
-    var arr,reg=new RegExp("(^| )"+'sid'+"=([^;]*)(;|$)");
+    var arr,reg=new RegExp("(^| )"+'token'+"=([^;]*)(;|$)");
     arr=document.cookie.match(reg);
-    if (arr) {//调试
-      if (sessionStorage.status==='1') {
-        console.log(sessionStorage.status);
-        axios.get('http://pay.queyoujia.com/auth/check',{params:{cid:sessionStorage.cid,channel:sessionStorage.channel/*sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'*/}}).then(function (res) {
-        if (res.data.data.userInfo.uid==res.data.data.userInfo.partnerId) {
-           self.$router.push({path:'/parsearch'});
-           self.navshow1=true;
-           self.navshow2=true;
-           self.navshow3=true;
-           sessionStorage.status='1';
-      }else{
-          self.$router.push({path:'/teamrechanger'});
-          self.navshow1=true;
-           self.navshow2=true;
-           self.navshow3=true;
-        }
-      }).catch(function (err) {
-        console.log(err);
-      })
-       
-      }else{
-         return;
-      }
-      //console.log(unescape(arr[2]));
+    console.log(arr);
+    if (true) {//调试
+          if (!sessionStorage.status) {
+              console.log(sessionStorage.status);
+                    axios.get('http://pay.queyoujia.com/auth/check',{params:{cid:sessionStorage.cid,channel:sessionStorage.channel/*sid:'9c8104987b3e7c170121412bb6afd439',toid:'1218482',token:'vk92SYb6349245'*/}}).then(function (res) {
+                        if (res.data.data.userInfo.uid==res.data.data.userInfo.partnerId) {
+                             self.$router.push({path:'/parsearch'});
+                             self.navshow1=true;
+                             self.navshow2=true;
+                             self.navshow3=true;
+                             sessionStorage.status='1';
+                             console.log('合伙人身份')
+                        }else{
+                            self.$router.push({path:'/teamrechanger'});
+                            self.navshow1=false;
+                             self.navshow2=false;
+                             self.navshow3=false;
+                              console.log('不是合伙人身份');
+                              sessionStorage.status='1';
+                          }
+                  }).catch(function (err) {
+                    console.log(err);
+                  })      
+          }else{
+             return;
+          }
+          //console.log(unescape(arr[2]));
     }else{
       console.log('身份不存在');
       self.$router.push({path:'/login'});

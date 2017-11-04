@@ -4,6 +4,7 @@
   </div>
 </template>
 <script>
+import axios from 'axios';
 export default {
   name: 'myheader',
   data () {
@@ -11,16 +12,21 @@ export default {
       nowheader:null,
       rightt:'',
       pdr:null,
-      shows:false
-    
+      shows:false,
+      damiod:null
     }},
     computed:{
       headerkey(){
-        var self=this;
-        console.log(self.$route.name);
+         var self =this;
+          axios.get('http://pay.queyoujia.com/user/info',{params:{cid:sessionStorage.cid,channel:sessionStorage.channel}}).then(function (res) {
+            console.log(res.data.data);
+            self.damiod=res.data.data.rich.diamond;
+          }).catch(function (err) {
+            console.log(err)
+          })
         self.nowheader=self.$route.name;
         if (self.$route.name=='提现结算'||self.$route.name=='我的会员'||self.$route.name=='我的会员') {
-            self.rightt='钻石剩余:35';
+            self.rightt='钻石剩余:'+self.damiod;
             self.pdr='10vw';
             self.shows=true;
         }else if(self.$route.name=='我的推广员'){

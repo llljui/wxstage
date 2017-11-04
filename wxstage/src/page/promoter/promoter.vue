@@ -152,7 +152,7 @@ export default {
         if (window.screen.availHeight<570) {
           self.tabH='300';
         }else{
-          self.tabH=(window.screen.availHeight-500+((560/window.screen.availHeight)*280));    
+          self.tabH=(window.screen.availHeight-500+((560/window.screen.availHeight)*270));    
           console.log(device_type);
         }
       }
@@ -161,7 +161,7 @@ export default {
   },
   mounted(){
     var self =this ;
-    var params={cid:'2',channel:'fuyang'};
+    var params={cid:sessionStorage.cid,channel:sessionStorage.channel};
     axios.post('http://pay.queyoujia.com/user/promoter/agent',qs.stringify(params),{headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                       }}).then(function (res) {
